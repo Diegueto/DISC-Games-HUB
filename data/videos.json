@@ -1,0 +1,13 @@
+{
+  "videos": [
+    {
+      "id": "presentacion-01",
+      "title": "Presentación de proyectos",
+      "description": "Presentación final de los proyectos del semestre.",
+      "semester": "2026-1",
+      "date": "2026-08-14",
+      "thumbnail": "assets/videos/presentacion-01.jpg",
+      "url": "https://www.youtube.com/watch?v=..."
+    }
+  ]
+}

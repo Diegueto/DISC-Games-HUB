@@ -120,13 +120,23 @@
                 <h1>Videos</h1>
                 <p>Revisa presentaciones, demostraciones y proyectos de la asignatura.</p>
             </div>
-
-            <div class="empty-section">
-                <span>🎬</span>
-                <h2>Videos del curso</h2>
-                <p>Próximamente podrás explorar los videos.</p>
-            </div>
+            <div class="video-filters" id="video-filters"></div>
+            <div class="videos-grid" id="videos-grid"></div>
         </section>
+
+        <!-- VISOR DE VIDEO -->
+        <div class="video-modal" id="video-modal">
+            <div class="video-modal-backdrop" id="video-modal-backdrop"></div>
+            <div class="video-modal-content">
+                <button class="video-modal-close" id="video-modal-close">×</button>
+                <div class="video-player-container" id="video-player-container"></div>
+                <div class="video-modal-info">
+                    <span id="video-modal-semester"></span>
+                    <h2 id="video-modal-title"></h2>
+                    <p id="video-modal-description"></p>
+                </div>
+            </div>
+        </div>
 
         <!-- DETALLE DEL JUEGO -->
         <section class="view" id="view-game-detail">
