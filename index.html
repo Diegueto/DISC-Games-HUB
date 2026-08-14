@@ -95,13 +95,23 @@
                 <h1>Fotos</h1>
                 <p>Momentos y experiencias de la asignatura.</p>
             </div>
-
-            <div class="empty-section">
-                <span>📸</span>
-                <h2>Fotos del curso</h2>
-                <p>Próximamente podrás explorar la galería.</p>
-            </div>
+            <div class="photo-filters" id="photo-filters"></div>
+            <div class="photos-grid" id="photos-grid"></div>
         </section>
+
+        <!-- VISOR DE FOTO -->
+        <div class="photo-modal" id="photo-modal">
+            <div class="photo-modal-backdrop" id="photo-modal-backdrop"></div>
+            <div class="photo-modal-content">
+                <button class="photo-modal-close" id="photo-modal-close">×</button>
+                <img id="photo-modal-image" src="" alt="">
+                <div class="photo-modal-info">
+                    <span id="photo-modal-semester"></span>
+                    <h2 id="photo-modal-title"></h2>
+                    <p id="photo-modal-description"></p>
+                </div>
+            </div>
+        </div>
 
         <!-- VIDEOS -->
         <section class="view" id="view-videos">

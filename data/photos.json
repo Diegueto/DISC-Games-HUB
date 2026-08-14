@@ -1,0 +1,12 @@
+{
+  "photos": [
+    {
+      "id": "clase-01",
+      "title": "Presentación de proyectos",
+      "description": "Estudiantes presentando sus proyectos.",
+      "semester": "2026-1",
+      "date": "2026-08-14",
+      "image": "assets/photos/clase-01.jpg"
+    }
+  ]
+}
