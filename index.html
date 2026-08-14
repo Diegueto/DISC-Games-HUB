@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,20 +12,142 @@
 
 <body>
 
-    <header>
-        <h1>DISC Games</h1>
-        <p>Biblioteca de videojuegos de la asignatura</p>
+    <!-- =========================================
+         NAVEGACIÓN
+    ========================================== -->
+
+    <header class="navbar">
+
+        <div class="logo">
+            DISC<span>GAMES</span>
+        </div>
+
+        <nav class="nav-links">
+
+            <button class="nav-button active">
+                Inicio
+            </button>
+
+            <button class="nav-button">
+                G.O.T.A.S
+            </button>
+
+            <button class="nav-button">
+                Todos los juegos
+            </button>
+
+            <button class="nav-button">
+                Fotos del Curso
+            </button>
+
+            <button class="nav-button">
+                Videos del Curso
+            </button>
+
+        </nav>
+
     </header>
 
-    <main>
-        <section>
-            <h2>Juegos</h2>
 
-            <div id="games-container"></div>
+    <!-- =========================================
+         CONTENIDO PRINCIPAL
+    ========================================== -->
+
+    <main>
+
+        <!-- HERO -->
+
+        <section class="hero" id="hero">
+
+            <div class="hero-background"></div>
+
+            <div class="hero-overlay"></div>
+
+            <div class="hero-content">
+
+                <div class="hero-info">
+
+                    <span class="hero-label">
+                        JUEGO DESTACADO
+                    </span>
+
+                    <h1 id="hero-title">
+                        Cargando...
+                    </h1>
+
+                    <p id="hero-description">
+                        Cargando información del juego...
+                    </p>
+
+                    <div class="hero-meta">
+
+                        <span id="hero-engine">
+                            Unity
+                        </span>
+
+                        <span id="hero-platform">
+                            PC
+                        </span>
+
+                    </div>
+
+                    <a
+                        id="download-button"
+                        class="download-button"
+                        href="#"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Descargar juego
+                    </a>
+
+                </div>
+
+            </div>
+
         </section>
+
+
+        <!-- JUEGOS -->
+
+        <section class="games-section">
+
+            <div class="section-header">
+
+                <div>
+                    <span class="section-label">
+                        COLECCIÓN
+                    </span>
+
+                    <h2>
+                        Explora los juegos
+                    </h2>
+                </div>
+
+                <span id="game-count" class="game-count">
+                    0 juegos
+                </span>
+
+            </div>
+
+
+            <div
+                id="games-container"
+                class="games-grid"
+            >
+            </div>
+
+        </section>
+
     </main>
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
 
     <script src="app.js"></script>
 
 </body>
+
 </html>
