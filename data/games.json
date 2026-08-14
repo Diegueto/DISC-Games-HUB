@@ -1,0 +1,157 @@
+{
+    "projects": [
+        {
+            "name": "G.O.T.A",
+            "description": "Los mejores juegos de cada semestre se llevan el título de Games Of The Asignature, estos proyectos son reconocidos por los estudiantes, ayudantes y docentes evaluadores de la asignatura.",
+            "engine": "Unity",
+            "platform": "PC, Android",
+            "link": "", 
+            "images": ["GOTA.jpg","imagen2.jpg"],
+            "authors": ["Diego Duarte"]
+        },
+        {
+            "name": "Products Battle",
+            "description": "¡Enfréntate al supermercado más caótico de todos! Aquí, los productos no esperan en los estantes... ¡te atacan sin piedad! Pon a prueba tus reflejos y tu sentido del ritmo en una batalla frenética por sobrevivir a este alocado desafío.",
+            "engine": "Unity",
+            "platform": "Android",
+            "link": "", 
+            "images": ["Products Battle2.png","Products Battle.png"],
+            "authors": ["Yinko Véliz","Fernando Vega","Rocío Espada","Yamir Castillo"]
+        },
+        {
+            "name": "Selene Vuelta a Casa",
+            "description": "Un valiente gato de capa roja logra volver desde 'El más allá' y emprende un mágico viaje para buscar a su familia, atravesando obstáculos, enemigos, portales y recompensas.",
+            "engine": "Unity",
+            "platform": "Android",
+            "link": "", 
+            "images": ["Selene Vuelta a Casa 2.png","Selene Vuelta a Casa 3.png"],
+            "authors": ["Pamela Vera", "Samuel Fuentes", "Byron Letelier"]
+        },
+        {
+            "name": "Honor Samurai Legacy",
+            "description": "En Honor Samurai Legacy, encarnarás a valientes samurais que no son simples guerreros, ¡sino animales intrépidos con un código de honor imparable! Prepárate para la acción frenética mientras exploras un paisaje exquisitamente diseñado, lleno de combates de reflejos y velocidad.",
+            "engine": "Unity",
+            "platform": "Android",
+            "link": "", 
+            "images": ["Honor Samurai Legacy.jpg","Honor Samurai Legacy 2.jpg"],
+            "authors": ["Kevin Araya","Germán Morales","Nataly Silva","Ernes Fuenzalida"]
+        },
+        {
+            "name": "Selene",
+            "description": "Selene, un gato fascinante, sueña con un cometa que choca con una misteriosa luz. Al despertar, se encuentra en un mundo de islas olvidadas donde almas de animales perdidos vagan sin recuerdos ni dirección. Selene se adentra en esta dimensión enigmática para desentrañar secretos y tejer destinos, en un viaje que desafía la memoria y la realidad. ",
+            "engine": "Unity",
+            "platform": "PC",
+            "link": "", 
+            "images": ["Selene 2.png"],
+            "authors": ["Samuel Fuentes","Pamela Vera","Catalina Sánchez","Byron Letelier"]
+        },
+        {
+            "name": "Meteor Survivor",
+            "description": "Eres un valiente dinosaurio en una carrera contrarreloj, destinado al núcleo terrestre para esquivar la aniquilación de un meteorito letal. Tu misión épica es desafiar la extinción y descubrir secretos profundos en las entrañas de la Tierra. ¡La aventura subterránea comienza ahora para salvar a tu especie de la oscuridad del olvido!",
+            "engine": "Unity",
+            "platform": "PC",
+            "link": "", 
+            "images": ["Meteor Survivor 2.png ","Meteor Survivor.png"],
+            "authors": ["Matías Salas","Vicente Figueroa","Adán Godoy","Robert Paladines","Alberto Lyons"]
+        },
+        {
+            "name": "Video Horror Scream",
+            "description": "Nuestro protagonista se dirige a una tienda para comprar una película de terror. Al ver la cinta en su casa, algo extraño sucede en el televisor... Este comienza a palpitar y dos seres extraños salen de el, logrando entrar a su hogar con el fin de asesinar...",
+            "engine": "Unity",
+            "platform": "PC",
+            "link": "", 
+            "images": ["video horror scream2.png","video horror scream.png"],
+            "authors": ["Kevin Araya","Germán Morales","Nataly Silva","Nicolas Tapia"]
+        },
+        {
+            "name": "Taca-Taca Arcade",
+            "description": "Consiste en un arcade PVP de futbolito, coloquialmente conocido como Taca-Taca, pero con un par de Power Ups que hacen el juego un poco más dinámico. Las partidas se pueden personalizar, desde cantidad de goles hasta la duración del partido.",
+            "engine": "Unity",
+            "platform": "PC",
+            "link": "", 
+            "images": ["Taca-Taca Arcade 3.png"],
+            "authors": ["Cristian Berrios","Francisco LLanos","Fernando Sanabria","Felipe Verdejo"]
+        },
+        {
+            "name": "SO...?",
+            "description": "Eres Stan, un detective que disfruta de su fiesta en su departamento en New York. En algún punto de esta fiesta, ocurre un asesinato. Tu objetivo: Encontrar pistas para resolver el crimen y descubrir al asesino.",
+            "engine": "Unity",
+            "platform": "PC",
+            "link": "", 
+            "images": ["so.png","so2.png"],
+            "authors": ["Giovanny Buzeta", "Matias Silva","Pablo Gaytan"]
+        },
+        {
+            "name": "Interloper",
+            "description": "Escapa de los calabozos esquivando enemigos y trampas.",
+            "engine": "Unity",
+            "platform": "PC",
+            "link": "", 
+            "images": ["Interloper2.png","Interloper.png"],
+            "authors": ["Nicolás Álvarez Díaz","Jhoan Mamani Carrillo", "Tomás Araya Silva", "Pablo Pérez Guerrero"]
+        },
+        {
+            "name": "Arréstenme si pueden",
+            "description": "Evita que la policía te atrape en tu hazaña de robar un banco, defiéndete con tus armas y sobrevive la mayor cantidad de oleadas de enemigos posibles. PD: Ningún policía es lastimado en el transcurso del juego.",
+            "engine": "Unity",
+            "platform": "PC",
+            "link": "", 
+            "images": ["Arrestenme si pueden2.png","Arrestenme si pueden.png"],
+            "authors": ["Miguel León","Vedrán Tomicic","Camila Gaytan","Gonzalo Castillo"]
+        },
+        {
+            "name": "Unleash Fantasy",
+            "description": "Videojuego de plataformas donde ayudas a Syra a completar su viaje con un poder especial para abrirte paso por distintos mundos.",
+            "engine": "Unity",
+            "platform": "PC",
+            "link": "", 
+            "images": ["unleash phantasy2.png","unleash phantasy.png"],
+            "authors": ["Gustavo Sziguethi","Angello Bermudez","Joel Castillo","Javier Carrizo","Felipe Cortéz"]
+        },
+        {
+            "name": "Cat Disaster",
+            "description": "Evita que tu bola de pelos se destruya en esta aventura de maullidos y acción.",
+            "engine": "Unity",
+            "platform": "PC",
+            "link": "", 
+            "images": ["Cat Disaste2.png","Cat Disaste.png"],
+            "authors": ["Matthew González","David Zeballos", "Fabián Soto","Matías Ortiz"]
+        },
+        {
+            "name": "Alex's Nightmare",
+            "description": "Alex es un joven de 23 años, que mientras se dirigía a su hogar, queda varado enfrente de una vieja casa. ¿Qué le espera a Alex en esta siniestra aventura?",
+            "engine": "Unity, Pygame",
+            "platform": "PC",
+            "link": "", 
+            "images": ["Alexs Nightmare2.png","Alexs Nightmare.png"],
+            "authors": ["Diego Duarte","Pablo Salas","Gerald López","Ayleen Torres","Cristobal Osses"]
+        },
+        {
+            "name": "Super Paralympics Simulator 2017",
+            "description": "Compite en una carrera olímpica para ver quién es el personaje más rápido. Este Juego fue creado en apoyo a la labor de la 'Oficina para integración de personas con discapacidad (OID) de Antofagasta.'",
+            "engine": "Pygame",
+            "platform": "PC",
+            "link": "", 
+            "images": ["super paralimpics.png","super paralimpics 2.png"],
+            "authors": ["Batián Muñoz","Matías Quezada","Juan Carlos Aguilera"]
+        },
+        {
+            "name": "Mercenary's Path",
+            "description": "Eres un mercenario que trabaja en la taberna de Eddartt, tu misión, acabar con todos los enemigos que aparecen en pantalla con tu fiel espada ¿Cuántos enemigos podrás derrotar en esta aventura?",
+            "engine": "Pygame",
+            "platform": "PC",
+            "link": "", 
+            "images": ["Mercenary3.png","Mercenary.png"],
+            "authors": ["Tomás Reimann","Felipe Varas","Nicolás González","Felipe Gaete"]
+        },
+        {
+            "name": "Project Orcs",
+            "description": "Project Orcs - Un juego del genero tower defense donde las gestion de tus torres y recursos es fundamental para conseguir la victoria.",
+            "engine": "Pygame",
+            "platform": "PC",
+            "link": "", 
+            "images": ["project Orcs2.png","project Orcs.png"],
+            "authors": ["Ignacio Santander","Denis Miranda","Julio Cerna","Marcelo Hidalgo","Ignacio Chirino"]
+        }
+    ]
+}
