@@ -7,22 +7,66 @@ let photos=[];
 let videos=[];
 let currentGame=null;
 
-/* CARGAR JUEGOS */
+/* CARGAR JUEGOS DESDE GOOGLE SHEETS */
+/* CARGAR JUEGOS DESDE GOOGLE SHEETS */
 async function loadGames(){
+    const url="https://docs.google.com/spreadsheets/d/e/2PACX-1vTf7oacZeR0e_IOhGZsNrgmP-XjGB3Ns-zGRL-_XoA6bgQXJv6nJumqqBORcWBBawQnMRLe7sgfSzX5/pub?gid=0&single=true&output=csv";
     try{
-        const response=await fetch("./data/games.json");
+        const response=await fetch(url);
         if(!response.ok)throw new Error(`Error HTTP: ${response.status}`);
-        const data=await response.json();
-        games=data.projects||[];
-        if(games.length===0)return;
+        const csv=await response.text();
+        games=parseCSV(csv).map(item=>({
+            id:item.ID,
+            name:item.Nombre,
+            description:item.Descripción,
+            subject:item.Asignatura,
+            career:item.Carrera,
+            category:item.Categoría,
+            platform:item.Plataforma,
+            engine:item.Motor,
+            version:item.Versión,
+            semester:item.Semestre,
+            size:item.Tamaño,
+            link:item.Descarga,
+            images:item.Imágenes?item.Imágenes.split("|").map(value=>value.trim()).filter(Boolean):[],
+            authors:item.Autores?item.Autores.split("|").map(value=>value.trim()).filter(Boolean):[],
+            gotas:{enabled:String(item.GOTA).toLowerCase()==="true",semester:String(item.GOTA).toLowerCase()==="true"?item.Semestre:""}
+        })).filter(game=>game.id);
+        console.log("Juegos cargados desde Google Sheets:",games);
         renderHomeGames();
         renderAllGames();
         initializeGotas();
         initializeFilters();
-        selectGame(0);
+        if(games.length>0)selectGame(0);
     }catch(error){
-        console.error("No se pudieron cargar los juegos:",error);
+        console.error("No se pudieron cargar los juegos desde Google Sheets:",error);
+        renderGamesError();
     }
+}
+
+/* PARSER CSV */
+function parseCSV(csv){
+    const rows=[];
+    let row=[],value="",insideQuotes=false;
+    for(let i=0;i<csv.length;i++){
+        const char=csv[i],next=csv[i+1];
+        if(char==='"'&&insideQuotes&&next==='"'){value+='"';i++;}
+        else if(char==='"')insideQuotes=!insideQuotes;
+        else if(char===','&&!insideQuotes){row.push(value.trim());value="";}
+        else if((char==='\n'||char==='\r')&&!insideQuotes){if(value||row.length){row.push(value.trim());rows.push(row);row=[];value="";}}
+        else value+=char;
+    }
+    if(value||row.length){row.push(value.trim());rows.push(row);}
+    const headers=rows.shift().map(header=>header.replace(/^"|"$/g,"").trim());
+    return rows.map(values=>Object.fromEntries(headers.map((header,index)=>[header,(values[index]||"").replace(/^"|"$/g,"").trim()])));
+}
+
+/* ERROR DE JUEGOS */
+function renderGamesError(){
+    const containers=[document.getElementById("home-games-grid"),document.getElementById("all-games-grid")];
+    containers.forEach(container=>{
+        if(container)container.innerHTML=`<div class="empty-section"><span>⚠️</span><h2>No se pudieron cargar los juegos</h2><p>Intenta actualizar la página nuevamente.</p></div>`;
+    });
 }
 
 /* CARGAR FOTOS */
