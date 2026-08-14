@@ -64,20 +64,17 @@ function renderHomeGames(){
     if(count)count.textContent=`${games.length} ${games.length===1?"juego":"juegos"}`;
 }
 
-/* TODOS LOS JUEGOS */
-function renderAllGames(career="all",subject="all",platform="all"){
+/* RENDERIZAR JUEGOS FILTRADOS */
+function renderAllGames(career="all",subject="all",category="all",platform="all"){
     const container=document.getElementById("all-games-grid");
     if(!container)return;
-    const filteredGames=games.filter(game=>(career==="all"||game.career===career)&&(subject==="all"||game.subject===subject)&&(platform==="all"||game.platform===platform));
+    const filteredGames=games.filter(game=>(career==="all"||game.career===career)&&(subject==="all"||game.subject===subject)&&(category==="all"||game.category===category)&&(platform==="all"||game.platform===platform));
     container.innerHTML="";
     if(filteredGames.length===0){
         container.innerHTML=`<div class="empty-section"><span>🎮</span><h2>No hay juegos disponibles</h2><p>No encontramos juegos con los filtros seleccionados.</p></div>`;
         return;
     }
-    filteredGames.forEach(game=>{
-        const index=games.indexOf(game);
-        container.appendChild(createGameCard(game,index));
-    });
+    filteredGames.forEach(game=>container.appendChild(createGameCard(game,games.indexOf(game))));
 }
 
 /* CREAR TARJETA */
@@ -126,8 +123,9 @@ function updateHero(game){
 function initializeFilters(){
     const careerFilter=document.getElementById("career-filter");
     const subjectFilter=document.getElementById("subject-filter");
+    const categoryFilter=document.getElementById("category-filter");
     const platformFilter=document.getElementById("platform-filter");
-    if(!careerFilter||!subjectFilter||!platformFilter)return;
+    if(!careerFilter||!subjectFilter||!categoryFilter||!platformFilter)return;
     const populateFilter=(select,values,defaultText,currentValue="all")=>{
         select.innerHTML=`<option value="all">${defaultText}</option>`;
         [...new Set(values.filter(Boolean))].sort().forEach(value=>{
@@ -136,33 +134,40 @@ function initializeFilters(){
             option.textContent=value;
             select.appendChild(option);
         });
-        if([...select.options].some(option=>option.value===currentValue))select.value=currentValue;
-        else select.value="all";
+        select.value=[...select.options].some(option=>option.value===currentValue)?currentValue:"all";
     };
     const updateFilters=()=>{
         const career=careerFilter.value;
         const subject=subjectFilter.value;
+        const category=categoryFilter.value;
         const platform=platformFilter.value;
         let availableGames=games;
         if(career!=="all")availableGames=availableGames.filter(game=>game.career===career);
         if(subject!=="all")availableGames=availableGames.filter(game=>game.subject===subject);
-        populateFilter(subjectFilter,availableGames.map(game=>game.subject),"Todas las asignaturas",subject);
+        populateFilter(category,availableGames.map(game=>game.category),"Todas las categorías",category);
         availableGames=games;
         if(career!=="all")availableGames=availableGames.filter(game=>game.career===career);
         if(subject!=="all")availableGames=availableGames.filter(game=>game.subject===subject);
-        populateFilter(platformFilter,availableGames.map(game=>game.platform),"Todas las plataformas",platform);
-        renderAllGames(career,subject,platform);
+        if(category!=="all")availableGames=availableGames.filter(game=>game.category===category);
+        populateFilter(platform,availableGames.map(game=>game.platform),"Todas las plataformas",platform);
+        renderAllGames(career,subject,category,platform);
     };
-    const careers=[...new Set(games.map(game=>game.career).filter(Boolean))].sort();
-    populateFilter(careerFilter,careers,"Todas las carreras");
+    populateFilter(careerFilter,games.map(game=>game.career),"Todas las carreras");
     populateFilter(subjectFilter,games.map(game=>game.subject),"Todas las asignaturas");
+    populateFilter(categoryFilter,games.map(game=>game.category),"Todas las categorías");
     populateFilter(platformFilter,games.map(game=>game.platform),"Todas las plataformas");
     careerFilter.addEventListener("change",()=>{
         subjectFilter.value="all";
+        categoryFilter.value="all";
         platformFilter.value="all";
         updateFilters();
     });
     subjectFilter.addEventListener("change",()=>{
+        categoryFilter.value="all";
+        platformFilter.value="all";
+        updateFilters();
+    });
+    categoryFilter.addEventListener("change",()=>{
         platformFilter.value="all";
         updateFilters();
     });

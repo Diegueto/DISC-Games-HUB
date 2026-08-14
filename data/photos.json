@@ -7,6 +7,14 @@
       "semester": "2026-1",
       "date": "2026-08-14",
       "image": "assets/photos/clase-01.jpg"
+    },
+    {
+      "id": "clase-02",
+      "title": "Trabajo en clases",
+      "description": "Estudiantes trabajando en el desarrollo de sus proyectos.",
+      "semester": "2026-1",
+      "date": "2026-08-14",
+      "image": "assets/photos/clase-02.jpg"
     }
   ]
 }

@@ -3,23 +3,23 @@
     {
       "id": "selene-vuelta-a-casa",
       "name": "Selene Vuelta a Casa",
-      "description": "Un valiente gato de capa roja logra volver desde 'El más allá' y emprende un mágico viaje para buscar a su familia, atravesando obstáculos, enemigos, portales y recompensas.",
+      "description": "Descripción del proyecto.",
+      "subject": "Desarrollo de Videojuegos",
+      "career": "Ingeniería Civil en Computación",
+      "category": "Videojuego",
+      "platform": "PC",
       "engine": "Unity",
-      "platform": "Android",
       "version": "1.0",
       "semester": "2026-1",
-      "size": "Por definir",
-      "link": "",
-      "subject": "Nombre de la asignatura",
-      "career": "Nombre de la carrera",
+      "size": "850 MB",
+      "link": "https://drive.google.com/...",
       "images": [
-        "assets/games/selene-vuelta-a-casa/portada.png",
-        "assets/games/selene-vuelta-a-casa/captura-01.png"
+        "assets/games/selene-vuelta-a-casa/cover.png",
+        "assets/games/selene-vuelta-a-casa/screenshot-01.png"
       ],
       "authors": [
-        "Pamela Vera",
-        "Samuel Fuentes",
-        "Byron Letelier"
+        "Nombre Estudiante 1",
+        "Nombre Estudiante 2"
       ],
       "gotas": {
         "enabled": true,
@@ -29,25 +29,23 @@
     {
       "id": "meteor-survivor",
       "name": "Meteor Survivor",
-      "description": "Eres un valiente dinosaurio en una carrera contrarreloj, destinado al núcleo terrestre para esquivar la aniquilación de un meteorito letal. Tu misión épica es desafiar la extinción y descubrir secretos profundos en las entrañas de la Tierra.",
-      "engine": "Unity",
+      "description": "Descripción del proyecto.",
+      "subject": "Desarrollo de Videojuegos",
+      "career": "Ingeniería Civil en Computación",
+      "category": "Videojuego",
       "platform": "PC",
+      "engine": "Unity",
       "version": "1.0",
       "semester": "2026-1",
-      "size": "Por definir",
-      "link": "",
-      "subject": "Nombre de la asignatura",
-      "career": "Nombre de la carrera",
+      "size": "720 MB",
+      "link": "https://drive.google.com/...",
       "images": [
-        "assets/games/meteor-survivor/portada.png",
-        "assets/games/meteor-survivor/captura-01.png"
+        "assets/games/meteor-survivor/cover.png",
+        "assets/games/meteor-survivor/screenshot-01.png"
       ],
       "authors": [
-        "Matías Salas",
-        "Vicente Figueroa",
-        "Adán Godoy",
-        "Robert Paladines",
-        "Alberto Lyons"
+        "Nombre Estudiante 1",
+        "Nombre Estudiante 2"
       ],
       "gotas": {
         "enabled": false,
@@ -57,25 +55,23 @@
     {
       "id": "project-orcs",
       "name": "Project Orcs",
-      "description": "Project Orcs es un juego del género tower defense donde la gestión de tus torres y recursos es fundamental para conseguir la victoria.",
-      "engine": "Pygame",
+      "description": "Descripción del proyecto.",
+      "subject": "Desarrollo de Videojuegos",
+      "career": "Ingeniería Civil en Computación",
+      "category": "Videojuego",
       "platform": "PC",
+      "engine": "Unity",
       "version": "1.0",
       "semester": "2026-1",
-      "size": "Por definir",
-      "link": "",
-      "subject": "Nombre de la asignatura",
-      "career": "Nombre de la carrera",
+      "size": "650 MB",
+      "link": "https://drive.google.com/...",
       "images": [
-        "assets/games/project-orcs/portada.png",
-        "assets/games/project-orcs/captura-01.png"
+        "assets/games/project-orcs/cover.png",
+        "assets/games/project-orcs/screenshot-01.png"
       ],
       "authors": [
-        "Ignacio Santander",
-        "Denis Miranda",
-        "Julio Cerna",
-        "Marcelo Hidalgo",
-        "Ignacio Chirino"
+        "Nombre Estudiante 1",
+        "Nombre Estudiante 2"
       ],
       "gotas": {
         "enabled": false,

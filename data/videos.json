@@ -8,6 +8,15 @@
       "date": "2026-08-14",
       "thumbnail": "assets/videos/presentacion-01.jpg",
       "url": "https://www.youtube.com/watch?v=..."
+    },
+    {
+      "id": "demo-01",
+      "title": "Demostración de proyecto",
+      "description": "Demostración del funcionamiento de uno de los proyectos desarrollados durante la asignatura.",
+      "semester": "2026-1",
+      "date": "2026-08-14",
+      "thumbnail": "assets/videos/demo-01.jpg",
+      "url": "https://www.youtube.com/watch?v=..."
     }
   ]
 }
