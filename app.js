@@ -213,9 +213,7 @@ function createGameCard(
         "click",
         () => {
 
-            selectGame(index);
-
-            showView("home");
+            showGameDetail(index);
 
         }
     );
@@ -321,7 +319,241 @@ function selectGame(index) {
 
 }
 
+/* =========================================
+   DETALLE DEL JUEGO
+========================================= */
 
+function showGameDetail(index) {
+
+    const game =
+        games[index];
+
+
+    if (!game) {
+        return;
+    }
+
+
+    /* Título */
+
+    document.getElementById(
+        "detail-title"
+    ).textContent =
+        game.name;
+
+
+    /* Descripción */
+
+    document.getElementById(
+        "detail-description"
+    ).textContent =
+        game.description;
+
+
+    /* Motor */
+
+    document.getElementById(
+        "detail-engine"
+    ).textContent =
+        game.engine;
+
+
+    /* Plataforma */
+
+    document.getElementById(
+        "detail-platform"
+    ).textContent =
+        game.platform;
+
+
+    /* =====================================
+       IMAGEN PRINCIPAL
+    ====================================== */
+
+    const mainImage =
+        document.getElementById(
+            "detail-main-image"
+        );
+
+
+    mainImage.src =
+        game.images[0];
+
+
+    mainImage.alt =
+        game.name;
+
+
+    /* =====================================
+       MINIATURAS
+    ====================================== */
+
+    const thumbnails =
+        document.getElementById(
+            "gallery-thumbnails"
+        );
+
+
+    thumbnails.innerHTML = "";
+
+
+    game.images.forEach(
+        (image, imageIndex) => {
+
+            const thumbnail =
+                document.createElement(
+                    "img"
+                );
+
+
+            thumbnail.src =
+                image;
+
+
+            thumbnail.alt =
+                `${game.name} imagen ${imageIndex + 1}`;
+
+
+            thumbnail.className =
+                "gallery-thumbnail";
+
+
+            if (imageIndex === 0) {
+
+                thumbnail.classList.add(
+                    "active"
+                );
+
+            }
+
+
+            thumbnail.addEventListener(
+                "click",
+                () => {
+
+                    mainImage.src =
+                        image;
+
+
+                    document
+                        .querySelectorAll(
+                            ".gallery-thumbnail"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList.remove(
+                                    "active"
+                                )
+                        );
+
+
+                    thumbnail.classList.add(
+                        "active"
+                    );
+
+                }
+            );
+
+
+            thumbnails.appendChild(
+                thumbnail
+            );
+
+        }
+    );
+
+
+    /* =====================================
+       AUTORES
+    ====================================== */
+
+    const authors =
+        document.getElementById(
+            "detail-authors"
+        );
+
+
+    authors.innerHTML = "";
+
+
+    game.authors.forEach(
+        author => {
+
+            const element =
+                document.createElement(
+                    "span"
+                );
+
+
+            element.className =
+                "author";
+
+
+            element.textContent =
+                author;
+
+
+            authors.appendChild(
+                element
+            );
+
+        }
+    );
+
+
+    /* =====================================
+       DESCARGA
+    ====================================== */
+
+    const downloadButton =
+        document.getElementById(
+            "detail-download-button"
+        );
+
+
+    if (
+        game.link &&
+        game.link.trim() !== ""
+    ) {
+
+        downloadButton.href =
+            game.link;
+
+
+        downloadButton.classList.remove(
+            "disabled"
+        );
+
+
+        downloadButton.textContent =
+            "Descargar juego";
+
+    } else {
+
+        downloadButton.href =
+            "#";
+
+
+        downloadButton.classList.add(
+            "disabled"
+        );
+
+
+        downloadButton.textContent =
+            "Descarga próximamente";
+
+    }
+
+
+    /* =====================================
+       MOSTRAR VISTA
+    ====================================== */
+
+    showView(
+        "game-detail"
+    );
+
+}
 
 /* =========================================
    NAVEGACIÓN
@@ -466,6 +698,18 @@ document
 
                 }
             );
+
+        }
+    );
+
+
+document
+    .getElementById("back-to-games")
+    .addEventListener(
+        "click",
+        () => {
+
+            showView("games");
 
         }
     );
