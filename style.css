@@ -1592,5 +1592,417 @@ body {
             16px;
 
     }
+}
+/* =========================================================
+   IMPROVED GAME DETAIL
+========================================================= */
+
+.game-detail-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        1.3fr 0.7fr;
+
+    gap: 70px;
+
+    margin-bottom: 80px;
 
 }
+
+
+/* =========================================================
+   DETAIL DESCRIPTION
+========================================================= */
+
+.game-detail-description {
+
+    max-width: 720px;
+
+}
+
+
+.detail-section-label {
+
+    display: block;
+
+    color: var(--accent-light);
+
+    font-size: 0.7rem;
+
+    font-weight: 700;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 12px;
+
+}
+
+
+.game-detail-description h2 {
+
+    font-size: 2rem;
+
+    letter-spacing: -1px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.game-detail-description p {
+
+    color: var(--text-muted);
+
+    font-size: 1rem;
+
+    line-height: 1.8;
+
+}
+
+
+/* =========================================================
+   DETAIL DATA
+========================================================= */
+
+.game-detail-data {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 12px;
+
+    align-content: start;
+
+}
+
+
+.detail-data-item {
+
+    padding: 20px;
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 16px;
+
+    transition:
+        border-color 0.25s ease,
+        transform 0.25s ease;
+
+}
+
+
+.detail-data-item:hover {
+
+    transform: translateY(-3px);
+
+    border-color:
+        rgba(
+            139,
+            92,
+            246,
+            0.35
+        );
+
+}
+
+
+.detail-data-item span {
+
+    display: block;
+
+    color: var(--accent-light);
+
+    font-size: 0.62rem;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.detail-data-item strong {
+
+    font-size: 0.95rem;
+
+    color: white;
+
+}
+
+
+/* =========================================================
+   AUTHORS
+========================================================= */
+
+.authors-section {
+
+    padding:
+        40px 0;
+
+    border-top:
+        1px solid
+        var(--border);
+
+    border-bottom:
+        1px solid
+        var(--border);
+
+}
+
+
+.authors-section h2 {
+
+    font-size: 1.8rem;
+
+    margin:
+        8px 0 22px;
+
+}
+
+
+.authors-list {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+}
+
+
+.author {
+
+    padding:
+        9px 15px;
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(
+            139,
+            92,
+            246,
+            0.1
+        );
+
+    border:
+        1px solid
+        rgba(
+            139,
+            92,
+            246,
+            0.2
+        );
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.88
+        );
+
+    font-size:
+        0.85rem;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease;
+
+}
+
+
+.author:hover {
+
+    background:
+        rgba(
+            139,
+            92,
+            246,
+            0.18
+        );
+
+    border-color:
+        rgba(
+            139,
+            92,
+            246,
+            0.4
+        );
+
+}
+
+
+/* =========================================================
+   DOWNLOAD AREA
+========================================================= */
+
+.detail-download {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 30px;
+
+    margin-top: 50px;
+
+    padding:
+        30px;
+
+    border-radius:
+        20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(
+                139,
+                92,
+                246,
+                0.14
+            ),
+            rgba(
+                255,
+                255,
+                255,
+                0.03
+            )
+        );
+
+    border:
+        1px solid
+        rgba(
+            139,
+            92,
+            246,
+            0.18
+        );
+
+}
+
+
+.download-info {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        5px;
+
+}
+
+
+.download-info span {
+
+    color:
+        var(--text-muted);
+
+    font-size:
+        0.8rem;
+
+}
+
+
+.download-info strong {
+
+    font-size:
+        1.1rem;
+
+}
+
+
+/* =========================================================
+   DOWNLOAD BUTTON IMPROVED
+========================================================= */
+
+.detail-download .download-button {
+
+    white-space:
+        nowrap;
+
+    padding:
+        14px 24px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE DETAIL
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .game-detail-layout {
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            40px;
+
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .game-detail-data {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+
+    .detail-download {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+    }
+
+
+    .detail-download
+    .download-button {
+
+        width:
+            100%;
+
+    }
+
+}
+
+
+@media (max-width: 450px) {
+
+    .game-detail-data {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+

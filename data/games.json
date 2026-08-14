@@ -6,6 +6,9 @@
       "description": "Un valiente gato de capa roja logra volver desde 'El más allá' y emprende un mágico viaje para buscar a su familia, atravesando obstáculos, enemigos, portales y recompensas.",
       "engine": "Unity",
       "platform": "Android",
+      "version": "1.0",
+      "semester": "2026-1",
+      "size": "Por definir",
       "link": "",
       "images": [
         "assets/games/selene-vuelta-a-casa/portada.png",
@@ -17,12 +20,16 @@
         "Byron Letelier"
       ]
     },
+
     {
       "id": "meteor-survivor",
       "name": "Meteor Survivor",
       "description": "Eres un valiente dinosaurio en una carrera contrarreloj, destinado al núcleo terrestre para esquivar la aniquilación de un meteorito letal. Tu misión épica es desafiar la extinción y descubrir secretos profundos en las entrañas de la Tierra.",
       "engine": "Unity",
       "platform": "PC",
+      "version": "1.0",
+      "semester": "2026-1",
+      "size": "Por definir",
       "link": "",
       "images": [
         "assets/games/meteor-survivor/portada.png",
@@ -36,12 +43,16 @@
         "Alberto Lyons"
       ]
     },
+
     {
       "id": "project-orcs",
       "name": "Project Orcs",
-      "description": "Project Orcs - Un juego del genero tower defense donde las gestion de tus torres y recursos es fundamental para conseguir la victoria.",
+      "description": "Project Orcs - Un juego del género tower defense donde la gestión de tus torres y recursos es fundamental para conseguir la victoria.",
       "engine": "Pygame",
       "platform": "PC",
+      "version": "1.0",
+      "semester": "2026-1",
+      "size": "Por definir",
       "link": "",
       "images": [
         "assets/games/project-orcs/portada.png",

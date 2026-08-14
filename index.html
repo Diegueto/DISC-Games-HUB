@@ -398,11 +398,13 @@
     ====================================== -->
 
     <section
-        class="view"
-        id="view-game-detail"
+    class="view"
+    id="view-game-detail"
     >
 
         <div class="game-detail">
+
+            <!-- VOLVER -->
 
             <button
                 id="back-to-games"
@@ -412,6 +414,8 @@
             </button>
 
 
+            <!-- ENCABEZADO -->
+
             <div class="game-detail-header">
 
                 <span
@@ -420,7 +424,6 @@
                 >
                     JUEGO
                 </span>
-
 
                 <h1 id="detail-title">
                     Juego
@@ -452,14 +455,21 @@
             </div>
 
 
-            <!-- INFORMACIÓN -->
+            <!-- INFORMACIÓN PRINCIPAL -->
 
-            <div class="game-detail-info">
+            <div class="game-detail-layout">
+
+
+                <!-- DESCRIPCIÓN -->
 
                 <div class="game-detail-description">
 
+                    <span class="detail-section-label">
+                        SOBRE EL JUEGO
+                    </span>
+
                     <h2>
-                        Sobre el juego
+                        Una experiencia creada por estudiantes
                     </h2>
 
                     <p id="detail-description">
@@ -468,9 +478,12 @@
                 </div>
 
 
-                <div class="game-detail-meta">
+                <!-- INFORMACIÓN -->
 
-                    <div class="detail-meta-box">
+                <div class="game-detail-data">
+
+
+                    <div class="detail-data-item">
 
                         <span>
                             MOTOR
@@ -482,7 +495,7 @@
                     </div>
 
 
-                    <div class="detail-meta-box">
+                    <div class="detail-data-item">
 
                         <span>
                             PLATAFORMA
@@ -492,6 +505,43 @@
                         </strong>
 
                     </div>
+
+
+                    <div class="detail-data-item">
+
+                        <span>
+                            VERSIÓN
+                        </span>
+
+                        <strong id="detail-version">
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-data-item">
+
+                        <span>
+                            SEMESTRE
+                        </span>
+
+                        <strong id="detail-semester">
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-data-item">
+
+                        <span>
+                            TAMAÑO
+                        </span>
+
+                        <strong id="detail-size">
+                        </strong>
+
+                    </div>
+
 
                 </div>
 
@@ -507,7 +557,7 @@
                 </span>
 
                 <h2>
-                    Autores
+                    Equipo
                 </h2>
 
 
@@ -523,6 +573,19 @@
 
             <div class="detail-download">
 
+                <div class="download-info">
+
+                    <span>
+                        ¿Listo para jugar?
+                    </span>
+
+                    <strong>
+                        Descarga el proyecto
+                    </strong>
+
+                </div>
+
+
                 <a
                     id="detail-download-button"
                     class="download-button"
@@ -530,12 +593,14 @@
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    Descargar juego
+                    ↓ Descargar juego
                 </a>
 
             </div>
 
         </div>
+
+    </section>
 
     </section>
 

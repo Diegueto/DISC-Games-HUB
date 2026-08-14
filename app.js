@@ -277,6 +277,23 @@ function selectGame(index) {
     ).textContent =
         game.platform;
 
+    document.getElementById(
+        "detail-version"
+    ).textContent =
+        game.version || "Por definir";
+
+
+    document.getElementById(
+        "detail-semester"
+    ).textContent =
+        game.semester || "Por definir";
+
+
+    document.getElementById(
+        "detail-size"
+    ).textContent =
+        game.size || "Por definir";
+    
 
     const downloadButton =
         document.getElementById(
@@ -324,6 +341,7 @@ function selectGame(index) {
 ========================================= */
 
 function showGameDetail(index) {
+
 
     const game =
         games[index];
