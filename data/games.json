@@ -10,6 +10,8 @@
       "semester": "2026-1",
       "size": "Por definir",
       "link": "",
+      "subject": "Nombre de la asignatura",
+      "career": "Nombre de la carrera",
       "images": [
         "assets/games/selene-vuelta-a-casa/portada.png",
         "assets/games/selene-vuelta-a-casa/captura-01.png"
@@ -34,6 +36,8 @@
       "semester": "2026-1",
       "size": "Por definir",
       "link": "",
+      "subject": "Nombre de la asignatura",
+      "career": "Nombre de la carrera",
       "images": [
         "assets/games/meteor-survivor/portada.png",
         "assets/games/meteor-survivor/captura-01.png"
@@ -60,6 +64,8 @@
       "semester": "2026-1",
       "size": "Por definir",
       "link": "",
+      "subject": "Nombre de la asignatura",
+      "career": "Nombre de la carrera",
       "images": [
         "assets/games/project-orcs/portada.png",
         "assets/games/project-orcs/captura-01.png"

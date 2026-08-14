@@ -77,13 +77,12 @@
                 <p>Explora los proyectos desarrollados por los estudiantes de la asignatura.</p>
             </div>
 
-            <div class="filters" id="game-filters">
-                <button class="filter-button active" data-platform="all">Todos</button>
-                <button class="filter-button" data-platform="PC">PC</button>
-                <button class="filter-button" data-platform="Android">Android</button>
-                <button class="filter-button" data-platform="Web">Web</button>
-                <button class="filter-button" data-platform="VR">VR</button>
-            </div>
+        <!-- FILTROS DE JUEGOS -->
+        <div class="filters">
+            <select class="catalog-filter" id="career-filter"><option value="all">Todas las carreras</option></select>
+            <select class="catalog-filter" id="subject-filter"><option value="all">Todas las asignaturas</option></select>
+            <select class="catalog-filter" id="platform-filter"><option value="all">Todas las plataformas</option></select>
+        </div>
 
             <div class="games-grid" id="all-games-grid"></div>
         </section>

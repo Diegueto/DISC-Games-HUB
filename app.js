@@ -65,12 +65,13 @@ function renderHomeGames(){
 }
 
 /* TODOS LOS JUEGOS */
-function renderAllGames(platform="all"){
+function renderAllGames(career="all",subject="all",platform="all"){
     const container=document.getElementById("all-games-grid");
+    if(!container)return;
+    const filteredGames=games.filter(game=>(career==="all"||game.career===career)&&(subject==="all"||game.subject===subject)&&(platform==="all"||game.platform===platform));
     container.innerHTML="";
-    const filteredGames=platform==="all"?games:games.filter(game=>game.platform===platform);
     if(filteredGames.length===0){
-        container.innerHTML=`<div class="empty-section"><span>🎮</span><h2>No hay juegos disponibles</h2><p>No encontramos juegos para esta plataforma.</p></div>`;
+        container.innerHTML=`<div class="empty-section"><span>🎮</span><h2>No hay juegos disponibles</h2><p>No encontramos juegos con los filtros seleccionados.</p></div>`;
         return;
     }
     filteredGames.forEach(game=>{
@@ -121,16 +122,51 @@ function updateHero(game){
     }
 }
 
-/* FILTROS DE JUEGOS */
+/* FILTROS INTELIGENTES */
 function initializeFilters(){
-    const filters=document.querySelectorAll(".filter-button");
-    filters.forEach(button=>{
-        button.addEventListener("click",()=>{
-            filters.forEach(item=>item.classList.remove("active"));
-            button.classList.add("active");
-            renderAllGames(button.dataset.platform);
+    const careerFilter=document.getElementById("career-filter");
+    const subjectFilter=document.getElementById("subject-filter");
+    const platformFilter=document.getElementById("platform-filter");
+    if(!careerFilter||!subjectFilter||!platformFilter)return;
+    const populateFilter=(select,values,defaultText,currentValue="all")=>{
+        select.innerHTML=`<option value="all">${defaultText}</option>`;
+        [...new Set(values.filter(Boolean))].sort().forEach(value=>{
+            const option=document.createElement("option");
+            option.value=value;
+            option.textContent=value;
+            select.appendChild(option);
         });
+        if([...select.options].some(option=>option.value===currentValue))select.value=currentValue;
+        else select.value="all";
+    };
+    const updateFilters=()=>{
+        const career=careerFilter.value;
+        const subject=subjectFilter.value;
+        const platform=platformFilter.value;
+        let availableGames=games;
+        if(career!=="all")availableGames=availableGames.filter(game=>game.career===career);
+        if(subject!=="all")availableGames=availableGames.filter(game=>game.subject===subject);
+        populateFilter(subjectFilter,availableGames.map(game=>game.subject),"Todas las asignaturas",subject);
+        availableGames=games;
+        if(career!=="all")availableGames=availableGames.filter(game=>game.career===career);
+        if(subject!=="all")availableGames=availableGames.filter(game=>game.subject===subject);
+        populateFilter(platformFilter,availableGames.map(game=>game.platform),"Todas las plataformas",platform);
+        renderAllGames(career,subject,platform);
+    };
+    const careers=[...new Set(games.map(game=>game.career).filter(Boolean))].sort();
+    populateFilter(careerFilter,careers,"Todas las carreras");
+    populateFilter(subjectFilter,games.map(game=>game.subject),"Todas las asignaturas");
+    populateFilter(platformFilter,games.map(game=>game.platform),"Todas las plataformas");
+    careerFilter.addEventListener("change",()=>{
+        subjectFilter.value="all";
+        platformFilter.value="all";
+        updateFilters();
     });
+    subjectFilter.addEventListener("change",()=>{
+        platformFilter.value="all";
+        updateFilters();
+    });
+    platformFilter.addEventListener("change",updateFilters);
 }
 
 /* FICHA DEL JUEGO */
