@@ -18,9 +18,12 @@
         "Pamela Vera",
         "Samuel Fuentes",
         "Byron Letelier"
-      ]
+      ],
+      "gotas": {
+        "enabled": true,
+        "semester": "2026-1"
+      }
     },
-
     {
       "id": "meteor-survivor",
       "name": "Meteor Survivor",
@@ -41,13 +44,16 @@
         "Adán Godoy",
         "Robert Paladines",
         "Alberto Lyons"
-      ]
+      ],
+      "gotas": {
+        "enabled": false,
+        "semester": ""
+      }
     },
-
     {
       "id": "project-orcs",
       "name": "Project Orcs",
-      "description": "Project Orcs - Un juego del género tower defense donde la gestión de tus torres y recursos es fundamental para conseguir la victoria.",
+      "description": "Project Orcs es un juego del género tower defense donde la gestión de tus torres y recursos es fundamental para conseguir la victoria.",
       "engine": "Pygame",
       "platform": "PC",
       "version": "1.0",
@@ -64,7 +70,11 @@
         "Julio Cerna",
         "Marcelo Hidalgo",
         "Ignacio Chirino"
-      ]
+      ],
+      "gotas": {
+        "enabled": false,
+        "semester": ""
+      }
     }
   ]
 }
