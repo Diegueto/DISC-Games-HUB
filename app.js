@@ -14,6 +14,7 @@ async function loadGames() {
         const response =
             await fetch("data/games.json");
 
+
         if (!response.ok) {
 
             throw new Error(
@@ -22,18 +23,22 @@ async function loadGames() {
 
         }
 
+
         const data =
             await response.json();
 
+
         games = data.projects;
 
-        renderGames();
+
+        renderHomeGames();
+
+        renderAllGames();
 
         selectGame(0);
 
-    }
 
-    catch (error) {
+    } catch (error) {
 
         console.error(
             "Error cargando los juegos:",
@@ -45,18 +50,21 @@ async function loadGames() {
 }
 
 
+
 /* =========================================
-   RENDERIZAR TARJETAS
+   TARJETAS DEL INICIO
 ========================================= */
 
-function renderGames() {
+function renderHomeGames() {
 
     const container =
         document.getElementById(
-            "games-container"
+            "home-games-container"
         );
 
+
     container.innerHTML = "";
+
 
     document.getElementById(
         "game-count"
@@ -64,59 +72,159 @@ function renderGames() {
         `${games.length} juegos`;
 
 
-    games.forEach((game, index) => {
+    games.forEach(
+        (game, index) => {
 
-        const card =
-            document.createElement("article");
-
-        card.className = "game-card";
-
-        card.innerHTML = `
-
-            <img
-                class="game-card-image"
-                src="${game.images[0]}"
-                alt="${game.name}"
-            >
-
-            <div class="game-card-content">
-
-                <h3 class="game-card-title">
-                    ${game.name}
-                </h3>
-
-                <p class="game-card-description">
-                    ${game.description}
-                </p>
-
-                <div class="game-card-meta">
-
-                    <span>
-                        ${game.engine}
-                    </span>
-
-                    <span>
-                        ${game.platform}
-                    </span>
-
-                </div>
-
-            </div>
-
-        `;
+            const card =
+                createGameCard(
+                    game,
+                    index
+                );
 
 
-        card.addEventListener(
-            "click",
-            () => selectGame(index)
+            container.appendChild(card);
+
+        }
+    );
+
+}
+
+
+
+/* =========================================
+   TODOS LOS JUEGOS
+========================================= */
+
+function renderAllGames(
+    filter = "all"
+) {
+
+    const container =
+        document.getElementById(
+            "all-games-container"
         );
 
 
-        container.appendChild(card);
+    container.innerHTML = "";
 
-    });
+
+    const filteredGames =
+        games.filter(
+            game => {
+
+                if (
+                    filter === "all"
+                ) {
+                    return true;
+                }
+
+
+                return game.platform
+                    .toLowerCase()
+                    .includes(
+                        filter.toLowerCase()
+                    );
+
+            }
+        );
+
+
+    filteredGames.forEach(
+        game => {
+
+            const index =
+                games.indexOf(game);
+
+
+            const card =
+                createGameCard(
+                    game,
+                    index
+                );
+
+
+            container.appendChild(card);
+
+        }
+    );
 
 }
+
+
+
+/* =========================================
+   CREAR TARJETA
+========================================= */
+
+function createGameCard(
+    game,
+    index
+) {
+
+    const card =
+        document.createElement(
+            "article"
+        );
+
+
+    card.className =
+        "game-card";
+
+
+    card.innerHTML = `
+
+        <img
+            class="game-card-image"
+            src="${game.images[0]}"
+            alt="${game.name}"
+        >
+
+
+        <div class="game-card-content">
+
+            <h3 class="game-card-title">
+                ${game.name}
+            </h3>
+
+
+            <p class="game-card-description">
+                ${game.description}
+            </p>
+
+
+            <div class="game-card-meta">
+
+                <span>
+                    ${game.engine}
+                </span>
+
+                <span>
+                    ${game.platform}
+                </span>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    card.addEventListener(
+        "click",
+        () => {
+
+            selectGame(index);
+
+            showView("home");
+
+        }
+    );
+
+
+    return card;
+
+}
+
 
 
 /* =========================================
@@ -129,24 +237,24 @@ function selectGame(index) {
         return;
     }
 
-    selectedGameIndex = index;
+
+    selectedGameIndex =
+        index;
+
 
     const game =
         games[index];
 
-
-    /* Fondo */
 
     const heroBackground =
         document.querySelector(
             ".hero-background"
         );
 
+
     heroBackground.style.backgroundImage =
         `url("${game.images[0]}")`;
 
-
-    /* Título */
 
     document.getElementById(
         "hero-title"
@@ -154,15 +262,11 @@ function selectGame(index) {
         game.name;
 
 
-    /* Descripción */
-
     document.getElementById(
         "hero-description"
     ).textContent =
         game.description;
 
-
-    /* Motor */
 
     document.getElementById(
         "hero-engine"
@@ -170,15 +274,11 @@ function selectGame(index) {
         game.engine;
 
 
-    /* Plataforma */
-
     document.getElementById(
         "hero-platform"
     ).textContent =
         game.platform;
 
-
-    /* Botón */
 
     const downloadButton =
         document.getElementById(
@@ -186,27 +286,33 @@ function selectGame(index) {
         );
 
 
-    if (game.link && game.link.trim() !== "") {
+    if (
+        game.link &&
+        game.link.trim() !== ""
+    ) {
 
         downloadButton.href =
             game.link;
+
 
         downloadButton.classList.remove(
             "disabled"
         );
 
+
         downloadButton.textContent =
             "Descargar juego";
 
-    }
+    } else {
 
-    else {
+        downloadButton.href =
+            "#";
 
-        downloadButton.href = "#";
 
         downloadButton.classList.add(
             "disabled"
         );
+
 
         downloadButton.textContent =
             "Descarga próximamente";
@@ -214,6 +320,156 @@ function selectGame(index) {
     }
 
 }
+
+
+
+/* =========================================
+   NAVEGACIÓN
+========================================= */
+
+function showView(
+    viewName
+) {
+
+    const views =
+        document.querySelectorAll(
+            ".view"
+        );
+
+
+    views.forEach(
+        view => {
+
+            view.classList.remove(
+                "active-view"
+            );
+
+        }
+    );
+
+
+    const selectedView =
+        document.getElementById(
+            `view-${viewName}`
+        );
+
+
+    if (selectedView) {
+
+        selectedView.classList.add(
+            "active-view"
+        );
+
+    }
+
+
+    const navButtons =
+        document.querySelectorAll(
+            ".nav-button"
+        );
+
+
+    navButtons.forEach(
+        button => {
+
+            button.classList.remove(
+                "active"
+            );
+
+
+            if (
+                button.dataset.view ===
+                viewName
+            ) {
+
+                button.classList.add(
+                    "active"
+                );
+
+            }
+
+        }
+    );
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+
+/* =========================================
+   EVENTOS DE NAVEGACIÓN
+========================================= */
+
+document
+    .querySelectorAll(
+        "[data-view]"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    showView(
+                        button.dataset.view
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+
+/* =========================================
+   FILTROS
+========================================= */
+
+document
+    .querySelectorAll(
+        ".filter-button"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    document
+                        .querySelectorAll(
+                            ".filter-button"
+                        )
+                        .forEach(
+                            btn =>
+                                btn.classList.remove(
+                                    "active"
+                                )
+                        );
+
+
+                    button.classList.add(
+                        "active"
+                    );
+
+
+                    renderAllGames(
+                        button.dataset.filter
+                    );
+
+                }
+            );
+
+        }
+    );
+
 
 
 /* =========================================

@@ -2,45 +2,75 @@
 <html lang="es">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>DISC Games</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="./style.css?v=2"
+    >
+
 </head>
+
 
 <body>
 
+
     <!-- =========================================
-         NAVEGACIÓN
+         NAVBAR
     ========================================== -->
 
     <header class="navbar">
 
-        <div class="logo">
+        <button
+            class="logo"
+            data-view="home"
+        >
             DISC<span>GAMES</span>
-        </div>
+        </button>
+
 
         <nav class="nav-links">
 
-            <button class="nav-button active">
+            <button
+                class="nav-button active"
+                data-view="home"
+            >
                 Inicio
             </button>
 
-            <button class="nav-button">
+            <button
+                class="nav-button"
+                data-view="gotas"
+            >
                 G.O.T.A.S
             </button>
 
-            <button class="nav-button">
+            <button
+                class="nav-button"
+                data-view="games"
+            >
                 Todos los juegos
             </button>
 
-            <button class="nav-button">
+            <button
+                class="nav-button"
+                data-view="photos"
+            >
                 Fotos del Curso
             </button>
 
-            <button class="nav-button">
+            <button
+                class="nav-button"
+                data-view="videos"
+            >
                 Videos del Curso
             </button>
 
@@ -49,57 +79,160 @@
     </header>
 
 
+
     <!-- =========================================
-         CONTENIDO PRINCIPAL
+         APP
     ========================================== -->
 
-    <main>
+    <main id="app">
 
-        <!-- HERO -->
 
-        <section class="hero" id="hero">
+        <!-- =====================================
+             INICIO
+        ====================================== -->
 
-            <div class="hero-background"></div>
+        <section
+            class="view active-view"
+            id="view-home"
+        >
 
-            <div class="hero-overlay"></div>
+            <section
+                class="hero"
+                id="hero"
+            >
 
-            <div class="hero-content">
+                <div class="hero-background"></div>
 
-                <div class="hero-info">
+                <div class="hero-overlay"></div>
 
-                    <span class="hero-label">
-                        JUEGO DESTACADO
-                    </span>
 
-                    <h1 id="hero-title">
-                        Cargando...
-                    </h1>
+                <div class="hero-content">
 
-                    <p id="hero-description">
-                        Cargando información del juego...
-                    </p>
+                    <div class="hero-info">
 
-                    <div class="hero-meta">
-
-                        <span id="hero-engine">
-                            Unity
+                        <span class="hero-label">
+                            JUEGO DESTACADO
                         </span>
 
-                        <span id="hero-platform">
-                            PC
-                        </span>
+                        <h1 id="hero-title">
+                            Cargando...
+                        </h1>
+
+                        <p id="hero-description">
+                            Cargando información...
+                        </p>
+
+
+                        <div class="hero-meta">
+
+                            <span id="hero-engine">
+                                Unity
+                            </span>
+
+                            <span id="hero-platform">
+                                PC
+                            </span>
+
+                        </div>
+
+
+                        <a
+                            id="download-button"
+                            class="download-button"
+                            href="#"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Descargar juego
+                        </a>
 
                     </div>
 
-                    <a
-                        id="download-button"
-                        class="download-button"
-                        href="#"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                </div>
+
+            </section>
+
+
+            <section class="games-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <span class="section-label">
+                            COLECCIÓN
+                        </span>
+
+                        <h2>
+                            Explora los juegos
+                        </h2>
+
+                    </div>
+
+                    <span
+                        id="game-count"
+                        class="game-count"
                     >
-                        Descargar juego
-                    </a>
+                        0 juegos
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="home-games-container"
+                    class="games-grid"
+                ></div>
+
+            </section>
+
+        </section>
+
+
+
+        <!-- =====================================
+             G.O.T.A.S
+        ====================================== -->
+
+        <section
+            class="view"
+            id="view-gotas"
+        >
+
+            <div class="page-header">
+
+                <span class="section-label">
+                    HALL OF FAME
+                </span>
+
+                <h1>
+                    G.O.T.A.S
+                </h1>
+
+                <p>
+                    Games Of The Asignature
+                </p>
+
+            </div>
+
+
+            <div class="gotas-content">
+
+                <div class="gotas-placeholder">
+
+                    <span class="gotas-icon">
+                        🏆
+                    </span>
+
+                    <h2>
+                        Los mejores juegos
+                    </h2>
+
+                    <p>
+                        Aquí aparecerán los juegos
+                        reconocidos como G.O.T.A.S
+                        de cada semestre.
+                    </p>
 
                 </div>
 
@@ -108,43 +241,161 @@
         </section>
 
 
-        <!-- JUEGOS -->
 
-        <section class="games-section">
+        <!-- =====================================
+             TODOS LOS JUEGOS
+        ====================================== -->
 
-            <div class="section-header">
+        <section
+            class="view"
+            id="view-games"
+        >
 
-                <div>
-                    <span class="section-label">
-                        COLECCIÓN
-                    </span>
+            <div class="page-header">
 
-                    <h2>
-                        Explora los juegos
-                    </h2>
-                </div>
-
-                <span id="game-count" class="game-count">
-                    0 juegos
+                <span class="section-label">
+                    COLECCIÓN
                 </span>
+
+                <h1>
+                    Todos los juegos
+                </h1>
+
+                <p>
+                    Explora los proyectos desarrollados
+                    en la asignatura.
+                </p>
+
+            </div>
+
+
+            <div class="filters">
+
+                <button
+                    class="filter-button active"
+                    data-filter="all"
+                >
+                    Todos
+                </button>
+
+                <button
+                    class="filter-button"
+                    data-filter="PC"
+                >
+                    PC
+                </button>
+
+                <button
+                    class="filter-button"
+                    data-filter="Android"
+                >
+                    Android
+                </button>
 
             </div>
 
 
             <div
-                id="games-container"
+                id="all-games-container"
                 class="games-grid"
-            >
+            ></div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             FOTOS
+        ====================================== -->
+
+        <section
+            class="view"
+            id="view-photos"
+        >
+
+            <div class="page-header">
+
+                <span class="section-label">
+                    MEMORIA
+                </span>
+
+                <h1>
+                    Fotos del Curso
+                </h1>
+
+                <p>
+                    Momentos y experiencias de la asignatura.
+                </p>
+
+            </div>
+
+
+            <div class="empty-section">
+
+                <span>📸</span>
+
+                <h2>
+                    Próximamente
+                </h2>
+
+                <p>
+                    Aquí construiremos la galería
+                    de fotografías del curso.
+                </p>
+
             </div>
 
         </section>
 
+
+
+        <!-- =====================================
+             VIDEOS
+        ====================================== -->
+
+        <section
+            class="view"
+            id="view-videos"
+        >
+
+            <div class="page-header">
+
+                <span class="section-label">
+                    EXPERIENCIAS
+                </span>
+
+                <h1>
+                    Videos del Curso
+                </h1>
+
+                <p>
+                    Presentaciones, demostraciones
+                    y experiencias de los estudiantes.
+                </p>
+
+            </div>
+
+
+            <div class="empty-section">
+
+                <span>🎬</span>
+
+                <h2>
+                    Próximamente
+                </h2>
+
+                <p>
+                    Aquí construiremos la sección
+                    de videos del curso.
+                </p>
+
+            </div>
+
+        </section>
+
+
     </main>
 
-
-    <!-- =========================================
-         JAVASCRIPT
-    ========================================== -->
 
     <script src="app.js"></script>
 
