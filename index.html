@@ -16,6 +16,7 @@
             <button class="nav-button active" data-view="home">Inicio</button>
             <button class="nav-button" data-view="gotas">G.O.T.A.S</button>
             <button class="nav-button" data-view="games">Todos los juegos</button>
+            <button class="nav-button" data-view="ar">Realidad Aumentada</button>
             <button class="nav-button" data-view="photos">Fotos</button>
             <button class="nav-button" data-view="videos">Videos</button>
         </nav>
@@ -52,42 +53,119 @@
         </section>
 
         <!-- G.O.T.A.S -->
+
         <section class="view" id="view-gotas">
-            <div class="gotas-page">
-                <div class="gotas-header">
-                    <span class="section-label">HALL OF FAME</span>
-                    <h1>G.O.T.A.S</h1>
-                    <p>Games Of The Asignature</p>
+            <div class="gotas-page"><div class="gotas-header">
+                <span class="section-label">HALL OF FAME</span>
+                <h1>G.O.T.A</h1>
+                <p>Games Of The Asignature</p>
+            </div>
+            <div class="gotas-current">
+                <span class="gotas-current-label">ÚLTIMO GANADOR</span>
+                <div class="gotas-winner" id="gotas-winner">
                 </div>
-
-                <div class="gotas-semester-selector">
-                    <span>SEMESTRE</span>
-                    <select id="gotas-semester"></select>
+            </div>
+            <div class="gotas-history">
+                <div class="gotas-history-header">
+                    <span class="section-label">HISTORIAL</span>
+                    <h2>Ganadores G.O.T.A</h2>
+                    <p>Los proyectos que dejaron su huella en la asignatura.</p>
                 </div>
+                <div class="gotas-history-grid" id="gotas-history-grid">
 
-                <div class="gotas-winner" id="gotas-winner"></div>
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- TODOS LOS JUEGOS -->
         <section class="view" id="view-games">
+
             <div class="page-header">
+
                 <span class="section-label">CATÁLOGO</span>
+
                 <h1>Todos los juegos</h1>
-                <p>Explora los proyectos desarrollados por los estudiantes de la asignatura.</p>
+
+                <p>
+                    Explora los proyectos desarrollados por los estudiantes
+                    de la asignatura.
+                </p>
+
             </div>
 
-        <!-- FILTROS DE JUEGOS -->
-        <div class="filters">
-            <select class="catalog-filter" id="career-filter"><option value="all">Todas las carreras</option></select>
-            <select class="catalog-filter" id="subject-filter"><option value="all">Todas las asignaturas</option></select>
-            <select class="catalog-filter" id="category-filter"><option value="all">Todas las categorías</option></select>
-            <select class="catalog-filter" id="platform-filter"><option value="all">Todas las plataformas</option></select>
-        </div>
 
-            <div class="games-grid" id="all-games-grid"></div>
+            <!-- FILTROS DE JUEGOS -->
+
+            <div class="filters">
+
+                <select class="catalog-filter" id="career-filter">
+                    <option value="all">
+                        Todas las carreras
+                    </option>
+                </select>
+
+                <select class="catalog-filter" id="subject-filter">
+                    <option value="all">
+                        Todas las asignaturas
+                    </option>
+                </select>
+
+                <select class="catalog-filter" id="category-filter">
+                    <option value="all">
+                        Todas las categorías
+                    </option>
+                </select>
+
+                <select class="catalog-filter" id="platform-filter">
+                    <option value="all">
+                        Todas las plataformas
+                    </option>
+                </select>
+
+            </div>
+
+
+            <!-- JUEGOS -->
+
+            <div
+                class="games-grid"
+                id="all-games-grid">
+            </div>
+
         </section>
 
+
+        <!-- =====================================================
+            REALIDAD AUMENTADA
+        ===================================================== -->
+
+        <section class="view" id="view-ar">
+
+            <div class="page-header ar-page-header">
+
+                <span class="section-label">
+                    EXPERIENCIAS AR
+                </span>
+
+                <h1>
+                    Realidad Aumentada
+                </h1>
+
+                <p>
+                    Explora los proyectos desarrollados por los estudiantes
+                    utilizando tecnologías de realidad aumentada.
+                </p>
+
+            </div>
+
+            <div
+                class="ar-grid"
+                id="ar-grid">
+            </div>
+
+        </section>
+        
         <!-- FOTOS -->
         <section class="view" id="view-photos">
             <div class="page-header">

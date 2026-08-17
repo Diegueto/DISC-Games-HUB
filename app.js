@@ -5,6 +5,8 @@
 let games=[];
 let photos=[];
 let videos=[];
+let arProjects=[];
+
 let currentGame=null;
 let currentPhotoAlbum=null;
 let currentPhotoIndex=0;
@@ -36,7 +38,7 @@ async function loadGames(){
         console.log("Juegos cargados desde Google Sheets:",games);
         renderHomeGames();
         renderAllGames();
-        initializeGotas();
+        renderGotas();
         initializeFilters();
         initializeHeroGotas();
         if(games.length>0)selectGame(0);
@@ -99,20 +101,290 @@ async function loadPhotos(){
     }
 }
 
-/* CARGAR VIDEOS */
+/* CARGAR VIDEOS DESDE GOOGLE SHEETS */
 async function loadVideos(){
+    const url="https://docs.google.com/spreadsheets/d/e/2PACX-1vTf7oacZeR0e_IOhGZsNrgmP-XjGB3Ns-zGRL-_XoA6bgQXJv6nJumqqBORcWBBawQnMRLe7sgfSzX5/pub?gid=1639227823&single=true&output=csv";
     try{
-        const response=await fetch("./data/videos.json");
+        const response=await fetch(url);
         if(!response.ok)throw new Error(`Error HTTP: ${response.status}`);
-        const data=await response.json();
-        videos=data.videos||[];
+        const csv=await response.text();
+        const data=parseCSV(csv);
+        const getValue=(item,name)=>{
+            const key=Object.keys(item).find(key=>key.normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().toLowerCase()===name.normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().toLowerCase());
+            return key?item[key]:"";
+        };
+        videos=data.map(item=>({
+            id:getValue(item,"ID"),
+            title:getValue(item,"Título"),
+            description:getValue(item,"Descripción"),
+            semester:getValue(item,"Semestre"),
+            thumbnail:getValue(item,"Miniatura").split("|")[0].trim(),
+            url:getValue(item,"Video")
+        })).filter(video=>video.id);
+        videos.forEach(video=>{
+            if(video.thumbnail&&!video.thumbnail.startsWith("http")&&!video.thumbnail.startsWith("assets/"))video.thumbnail=`assets/videos/${video.id}/${video.thumbnail}`;
+        });
+        console.log("Videos cargados desde Google Sheets:",videos);
         renderVideos();
         initializeVideoModal();
     }catch(error){
-        console.error("No se pudieron cargar los videos:",error);
+        console.error("No se pudieron cargar los videos desde Google Sheets:",error);
         renderEmptyVideos();
     }
 }
+
+/* =========================================================
+   CARGAR REALIDAD AUMENTADA DESDE GOOGLE SHEETS
+========================================================= */
+
+async function loadAR(){
+
+    /*
+     * REEMPLAZAR ESTE GID POR EL GID DE LA PESTAÑA AR
+     */
+    const url="https://docs.google.com/spreadsheets/d/e/2PACX-1vTf7oacZeR0e_IOhGZsNrgmP-XjGB3Ns-zGRL-_XoA6bgQXJv6nJumqqBORcWBBawQnMRLe7sgfSzX5/pub?gid=393796093&single=true&output=csv";
+
+    try{
+
+        const response=await fetch(url);
+
+        if(!response.ok){
+            throw new Error(`Error HTTP: ${response.status}`);
+        }
+
+        const csv=await response.text();
+
+        const data=parseCSV(csv);
+
+        /*
+         * Permite encontrar encabezados aunque tengan
+         * diferencias de mayúsculas o tildes.
+         */
+        const getValue=(item,name)=>{
+
+            const key=Object.keys(item).find(key=>
+                key
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g,"")
+                    .trim()
+                    .toLowerCase()
+                ===
+                name
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g,"")
+                    .trim()
+                    .toLowerCase()
+            );
+
+            return key ? item[key] : "";
+        };
+
+        arProjects=data.map(item=>{
+
+            const id=getValue(item,"ID");
+
+            const imageValues=getValue(item,"Imagen")
+                .split("|")
+                .map(value=>value.trim())
+                .filter(Boolean);
+
+            const images=imageValues.map(value=>{
+
+                if(
+                    value.startsWith("http") ||
+                    value.startsWith("assets/")
+                ){
+                    return value;
+                }
+
+                return `assets/ar/${id}/${value}`;
+
+            });
+
+            return {
+
+                id:id,
+
+                title:getValue(item,"Título"),
+
+                description:getValue(item,"Descripción"),
+
+                semester:getValue(item,"Semestre"),
+
+                date:getValue(item,"Fecha"),
+
+                platform:getValue(item,"Plataforma"),
+
+                engine:getValue(item,"Motor"),
+
+                link:getValue(item,"Enlace"),
+
+                images:images
+
+            };
+
+        }).filter(project=>project.id);
+
+        console.log(
+            "Proyectos AR cargados desde Google Sheets:",
+            arProjects
+        );
+
+        renderAR();
+
+    }catch(error){
+
+        console.error(
+            "No se pudieron cargar los proyectos AR desde Google Sheets:",
+            error
+        );
+
+        renderEmptyAR();
+
+    }
+
+}
+
+/* =========================================================
+   RENDERIZAR REALIDAD AUMENTADA
+========================================================= */
+
+function renderAR(){
+
+    const container=document.getElementById("ar-grid");
+
+    if(!container)return;
+
+    container.innerHTML="";
+
+    if(arProjects.length===0){
+
+        renderEmptyAR();
+
+        return;
+
+    }
+
+    arProjects.forEach(project=>{
+
+        const card=document.createElement("article");
+
+        card.className="ar-card";
+
+        const image=
+            project.images &&
+            project.images.length>0
+            ?project.images[0]
+            :"";
+
+        card.innerHTML=`
+
+            <div class="ar-card-image-container">
+
+                <img
+                    class="ar-card-image"
+                    src="${image}"
+                    alt="${project.title||"Proyecto de realidad aumentada"}"
+                >
+
+                <div class="ar-card-overlay">
+
+                    <div>
+
+                        <h3 class="ar-card-title">
+                            ${project.title||"Proyecto AR"}
+                        </h3>
+
+                        <span class="ar-card-semester">
+                            ${project.semester||""}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="ar-card-content">
+
+                <p class="ar-card-description">
+                    ${project.description||""}
+                </p>
+
+                <div class="ar-card-meta">
+
+                    ${
+                        project.platform
+                        ?`<span>${project.platform}</span>`
+                        :""
+                    }
+
+                    ${
+                        project.engine
+                        ?`<span>${project.engine}</span>`
+                        :""
+                    }
+
+                </div>
+
+                ${
+                    project.link
+                    ?`
+                        <a
+                            class="ar-card-button"
+                            href="${project.link}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Ver proyecto →
+                        </a>
+                    `
+                    :""
+                }
+
+            </div>
+        `;
+
+        container.appendChild(card);
+
+    });
+
+}
+
+/* =========================================================
+   AR VACÍO
+========================================================= */
+
+function renderEmptyAR(){
+
+    const container=document.getElementById("ar-grid");
+
+    if(!container)return;
+
+    container.innerHTML=`
+
+        <div class="ar-empty">
+
+            <span class="ar-empty-icon">
+                📱
+            </span>
+
+            <h2>
+                Aún no hay proyectos de Realidad Aumentada
+            </h2>
+
+            <p>
+                Los proyectos desarrollados por los estudiantes
+                aparecerán aquí.
+            </p>
+
+        </div>
+
+    `;
+
+}
+
+
 
 /* INICIO */
 function renderHomeGames(){
@@ -352,30 +624,46 @@ function initializeHeroGotas(){
 }
 
 
-/* MOSTRAR G.O.T.A.S */
-function renderGotas(semester){
-    const winner=games.find(game=>game.gotas&&game.gotas.enabled===true&&game.gotas.semester===semester);
-    renderGotasWinner(winner,semester);
+/* G.O.T.A.S HALL OF FAME */
+function renderGotas(){
+    const gotas=games.filter(game=>game.gotas&&game.gotas.enabled).sort((a,b)=>String(b.semester||"").localeCompare(String(a.semester||"")));
+    const winnerContainer=document.getElementById("gotas-winner");
+    const historyContainer=document.getElementById("gotas-history-grid");
+    if(!winnerContainer||!historyContainer)return;
+    winnerContainer.innerHTML="";
+    historyContainer.innerHTML="";
+    if(gotas.length===0){renderEmptyGotas();return;}
+    renderGotasWinner(gotas[0]);
+    gotas.slice(1).forEach(game=>renderGotaHistoryCard(game));
 }
 
-/* GANADOR G.O.T.A.S */
-function renderGotasWinner(game,semester){
+/* GANADOR ACTUAL */
+function renderGotasWinner(game){
     const container=document.getElementById("gotas-winner");
-    container.innerHTML="";
-    if(!game){
-        container.innerHTML=`<div class="gotas-empty"><span class="gotas-empty-icon">🏆</span><h2>Aún no hay ganador</h2><p>Este semestre todavía no tiene un G.O.T.A.S.</p></div>`;
-        return;
-    }
-    const authors=game.authors&&game.authors.length>0?game.authors.map(author=>`<span class="gotas-author">${author}</span>`).join(" · "):"Autores no disponibles";
-    const image=game.images&&game.images.length>0?game.images[0]:"";
-    container.innerHTML=`<div class="gotas-winner-image"><img src="${image}" alt="${game.name}"></div><div class="gotas-winner-info"><span class="gotas-trophy">🏆</span><span class="gotas-position">GANADOR G.O.T.A.S</span><h2>${game.name}</h2><span class="gotas-semester-label">Semestre ${semester}</span><div class="gotas-authors">${authors}</div><button class="gotas-winner-button" id="gotas-view-game">Ver juego →</button></div>`;
-    document.getElementById("gotas-view-game").addEventListener("click",()=>showGameDetail(games.indexOf(game)));
+    if(!game){renderEmptyGotas();return;}
+    const authors=game.authors&&game.authors.length?game.authors.join(" · "):"Autores no disponibles";
+    const image=game.images&&game.images.length?game.images[0]:"";
+    container.innerHTML=`<div class="gotas-winner-card"><div class="gotas-winner-image"><img src="${image}" alt="${game.name}"></div><div class="gotas-winner-info"><span class="gotas-trophy">🏆</span><span class="gotas-position">GANADOR G.O.T.A</span><span class="gotas-winner-semester">${game.semester||""}</span><h2>${game.name}</h2><p>${game.description||""}</p><div class="gotas-authors">${authors}</div><div class="gotas-meta"><span>${game.category||"Categoría"}</span><span>${game.platform||"Plataforma"}</span><span>${game.engine||"Motor"}</span></div><button class="gotas-winner-button">Ver juego →</button></div></div>`;
+    container.querySelector(".gotas-winner-button").addEventListener("click",()=>showGameDetail(games.indexOf(game)));
+}
+
+/* HISTORIAL */
+function renderGotaHistoryCard(game){
+    const container=document.getElementById("gotas-history-grid");
+    const image=game.images&&game.images.length?game.images[0]:"";
+    const card=document.createElement("article");
+    card.className="gota-history-card";
+    card.innerHTML=`<div class="gota-history-image"><img src="${image}" alt="${game.name}"><span class="gota-history-trophy">🏆</span></div><div class="gota-history-content"><span class="gota-history-semester">${game.semester||"Semestre"}</span><h3>${game.name}</h3><p>${game.category||"Proyecto"}</p><button>Ver juego →</button></div>`;
+    card.addEventListener("click",()=>showGameDetail(games.indexOf(game)));
+    container.appendChild(card);
 }
 
 /* SIN G.O.T.A.S */
 function renderEmptyGotas(){
     const container=document.getElementById("gotas-winner");
-    container.innerHTML=`<div class="gotas-empty"><span class="gotas-empty-icon">🏆</span><h2>Aún no hay G.O.T.A.S</h2><p>Los reconocimientos aparecerán aquí cuando sean publicados.</p></div>`;
+    const history=document.getElementById("gotas-history-grid");
+    if(container)container.innerHTML=`<div class="gotas-empty"><span class="gotas-empty-icon">🏆</span><h2>Aún no hay ganadores</h2><p>Los reconocimientos aparecerán aquí cuando sean publicados.</p></div>`;
+    if(history)history.innerHTML="";
 }
 
 /* FOTOS */
@@ -598,4 +886,5 @@ document.addEventListener("DOMContentLoaded",()=>{
     loadGames();
     loadPhotos();
     loadVideos();
+    loadAR();
 });
