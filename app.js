@@ -27,8 +27,8 @@ async function loadGames(){
             version:item.Versión,
             semester:item.Semestre,
             size:item.Tamaño,
-            link:item.Descarga,
-            images:item.Imágenes?item.Imágenes.split("|").map(value=>value.trim()).filter(Boolean):[],
+            link:item.ID_Drive?`https://drive.google.com/uc?export=download&id=${item.ID_Drive}`:item.Descarga||"",
+            images:item.Imágenes?item.Imágenes.split("|").map(value=>`assets/games/${item.ID}/${value.trim()}`).filter(Boolean):[],
             authors:item.Autores?item.Autores.split("|").map(value=>value.trim()).filter(Boolean):[],
             gotas:{enabled:String(item.GOTA).toLowerCase()==="true",semester:String(item.GOTA).toLowerCase()==="true"?item.Semestre:""}
         })).filter(game=>game.id);
