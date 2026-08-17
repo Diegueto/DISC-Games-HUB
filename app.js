@@ -126,7 +126,7 @@ function createGameCard(game,index){
     const card=document.createElement("article");
     card.className="game-card";
     const image=game.images&&game.images.length>0?game.images[0]:"";
-    card.innerHTML=`<img class="game-card-image" src="${image}" alt="${game.name}"><div class="game-card-content"><h3 class="game-card-title">${game.name}</h3><p class="game-card-description">${game.description}</p><div class="game-card-meta"><span>${game.platform||"Plataforma"}</span><span>${game.engine||"Motor"}</span></div></div>`;
+    card.innerHTML=`<img class="game-card-image" src="${image}" alt="${game.name}"><div class="game-card-content"><h3 class="game-card-title">${game.name}</h3><p class="game-card-description">${game.description}</p><div class="game-card-meta"><span>${game.category||"Categoría"}</span><span>${game.platform||"Plataforma"}</span><span>${game.engine||"Motor"}</span></div></div>`;
     card.addEventListener("click",()=>showGameDetail(index));
     return card;
 }
