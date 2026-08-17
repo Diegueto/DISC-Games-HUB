@@ -37,6 +37,7 @@ async function loadGames(){
         renderAllGames();
         initializeGotas();
         initializeFilters();
+        initializeHeroGotas();
         if(games.length>0)selectGame(0);
     }catch(error){
         console.error("No se pudieron cargar los juegos desde Google Sheets:",error);
@@ -293,27 +294,49 @@ function updateDownloadButton(game){
     }
 }
 
-/* G.O.T.A.S */
+/* ROTADOR DE GOTA */
 function initializeGotas(){
-    const semesterSelect=document.getElementById("gotas-semester");
-    if(!semesterSelect)return;
-    const gotasGames=games.filter(game=>game.gotas&&game.gotas.enabled===true&&game.gotas.semester);
-    semesterSelect.innerHTML="";
-    if(gotasGames.length===0){
-        renderEmptyGotas();
-        return;
-    }
-    const semesters=[...new Set(gotasGames.map(game=>game.gotas.semester))];
-    semesters.sort().reverse();
-    semesters.forEach(semester=>{
-        const option=document.createElement("option");
-        option.value=semester;
-        option.textContent=semester;
-        semesterSelect.appendChild(option);
-    });
-    semesterSelect.addEventListener("change",()=>renderGotas(semesterSelect.value));
-    renderGotas(semesters[0]);
+    const gotas=games.filter(game=>game.gotas&&game.gotas.enabled);
+    if(gotas.length===0)return;
+    let currentIndex=0;
+    const renderGota=()=>{
+        const game=gotas[currentIndex];
+        const container=document.getElementById("gota-featured");
+        if(!container)return;
+        const image=game.images&&game.images.length>0?game.images[0]:"";
+        container.innerHTML=`<div class="gota-featured-image"><img src="${image}" alt="${game.name}"></div><div class="gota-featured-content"><span class="gota-label">G.O.T.A</span><h2>${game.name}</h2><p>${game.description}</p><div class="gota-meta"><span>${game.category||"Categoría"}</span><span>${game.platform||"Plataforma"}</span><span>${game.engine||"Motor"}</span></div><button class="gota-button">Ver juego</button></div>`;
+        container.querySelector(".gota-button").addEventListener("click",()=>showGameDetail(games.indexOf(game)));
+    };
+    renderGota();
+    if(gotas.length>1)setInterval(()=>{currentIndex=(currentIndex+1)%gotas.length;renderGota();},10000);
 }
+
+/* ROTADOR GOTA EN INICIO */
+function initializeHeroGotas(){
+    const gotas=games.filter(game=>game.gotas&&game.gotas.enabled);
+    if(!gotas.length)return;
+    let currentIndex=Math.floor(Math.random()*gotas.length);
+    const background=document.getElementById("hero-background");
+    const label=document.getElementById("hero-label");
+    const title=document.getElementById("hero-title");
+    const description=document.getElementById("hero-description");
+    const meta=document.getElementById("hero-meta");
+    const download=document.getElementById("hero-download");
+    const render=()=>{
+        const game=gotas[currentIndex];
+        const image=game.images&&game.images.length?game.images[0]:"";
+        background.style.backgroundImage=image?`url("${image}")`:"";
+        label.textContent=`G.O.T.A · ${game.semester||"GANADOR"}`;
+        title.textContent=game.name;
+        description.textContent=game.description;
+        meta.innerHTML=`<span>${game.category||"Categoría"}</span><span>${game.platform||"Plataforma"}</span><span>${game.engine||"Motor"}</span>`;
+        download.href=game.link||"#";
+        download.style.display=game.link?"inline-flex":"none";
+    };
+    render();
+    if(gotas.length>1)setInterval(()=>{currentIndex=(currentIndex+1)%gotas.length;render()},10000);
+}
+
 
 /* MOSTRAR G.O.T.A.S */
 function renderGotas(semester){
