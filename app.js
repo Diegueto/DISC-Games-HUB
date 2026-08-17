@@ -6,8 +6,9 @@ let games=[];
 let photos=[];
 let videos=[];
 let currentGame=null;
+let currentPhotoAlbum=null;
+let currentPhotoIndex=0;
 
-/* CARGAR JUEGOS DESDE GOOGLE SHEETS */
 /* CARGAR JUEGOS DESDE GOOGLE SHEETS */
 async function loadGames(){
     const url="https://docs.google.com/spreadsheets/d/e/2PACX-1vTf7oacZeR0e_IOhGZsNrgmP-XjGB3Ns-zGRL-_XoA6bgQXJv6nJumqqBORcWBBawQnMRLe7sgfSzX5/pub?gid=0&single=true&output=csv";
@@ -47,8 +48,7 @@ async function loadGames(){
 
 /* PARSER CSV */
 function parseCSV(csv){
-    const rows=[];
-    let row=[],value="",insideQuotes=false;
+    const rows=[];let row=[],value="",insideQuotes=false;
     for(let i=0;i<csv.length;i++){
         const char=csv[i],next=csv[i+1];
         if(char==='"'&&insideQuotes&&next==='"'){value+='"';i++;}
@@ -58,7 +58,7 @@ function parseCSV(csv){
         else value+=char;
     }
     if(value||row.length){row.push(value.trim());rows.push(row);}
-    const headers=rows.shift().map(header=>header.replace(/^"|"$/g,"").trim());
+    const headers=rows.shift().map(header=>header.replace(/^\uFEFF/,"").replace(/^"|"$/g,"").trim());
     return rows.map(values=>Object.fromEntries(headers.map((header,index)=>[header,(values[index]||"").replace(/^"|"$/g,"").trim()])));
 }
 
@@ -70,18 +70,32 @@ function renderGamesError(){
     });
 }
 
-/* CARGAR FOTOS */
+/* CARGAR FOTOS DESDE GOOGLE SHEETS */
 async function loadPhotos(){
+    const url="https://docs.google.com/spreadsheets/d/e/2PACX-1vTf7oacZeR0e_IOhGZsNrgmP-XjGB3Ns-zGRL-_XoA6bgQXJv6nJumqqBORcWBBawQnMRLe7sgfSzX5/pub?gid=1287530204&single=true&output=csv";
     try{
-        const response=await fetch("./data/photos.json");
+        const response=await fetch(url);
         if(!response.ok)throw new Error(`Error HTTP: ${response.status}`);
-        const data=await response.json();
-        photos=data.photos||[];
+        const csv=await response.text();
+        const data=parseCSV(csv);
+        const getValue=(item,name)=>{
+            const key=Object.keys(item).find(key=>key.normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().toLowerCase()===name.normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().toLowerCase());
+            return key?item[key]:"";
+        };
+        photos=data.map(item=>({
+            id:getValue(item,"ID"),
+            title:getValue(item,"Título"),
+            description:getValue(item,"Descripción"),
+            semester:getValue(item,"Semestre"),
+            date:getValue(item,"Fecha"),
+            images:getValue(item,"Imágenes").split("|").map(value=>value.trim()).filter(Boolean).map(value=>value.startsWith("http")||value.startsWith("assets/")?value:`assets/photos/${getValue(item,"ID")}/${value}`)
+        })).filter(photo=>photo.id);
+        console.log("Fotos cargadas desde Google Sheets:",photos);
+        console.log("Primera imagen:",photos[0]?.images);
         renderPhotos();
         initializePhotoModal();
     }catch(error){
-        console.error("No se pudieron cargar las fotos:",error);
-        renderEmptyPhotos();
+        console.error("No se pudieron cargar las fotos desde Google Sheets:",error);
     }
 }
 
@@ -370,10 +384,7 @@ function renderPhotos(semester="all"){
     const filters=document.getElementById("photo-filters");
     container.innerHTML="";
     filters.innerHTML="";
-    if(photos.length===0){
-        renderEmptyPhotos();
-        return;
-    }
+    if(photos.length===0){renderEmptyPhotos();return;}
     const semesters=[...new Set(photos.map(photo=>photo.semester).filter(Boolean))];
     const allButton=document.createElement("button");
     allButton.className=`photo-filter-button ${semester==="all"?"active":""}`;
@@ -389,14 +400,12 @@ function renderPhotos(semester="all"){
     });
     filters.querySelectorAll(".photo-filter-button").forEach(button=>button.addEventListener("click",()=>renderPhotos(button.dataset.semester)));
     const filteredPhotos=semester==="all"?photos:photos.filter(photo=>photo.semester===semester);
-    if(filteredPhotos.length===0){
-        renderEmptyPhotos();
-        return;
-    }
+    if(filteredPhotos.length===0){renderEmptyPhotos();return;}
     filteredPhotos.forEach(photo=>{
+        if(!photo.images||photo.images.length===0)return;
         const card=document.createElement("article");
         card.className="photo-card";
-        card.innerHTML=`<img src="${photo.image}" alt="${photo.title||"Foto del curso"}"><div class="photo-card-overlay"><h3 class="photo-card-title">${photo.title||"Foto del curso"}</h3><span class="photo-card-semester">${photo.semester||""}</span></div>`;
+        card.innerHTML=`<img src="${photo.images[0]}" alt="${photo.title||"Foto del curso"}"><div class="photo-card-overlay"><div><h3 class="photo-card-title">${photo.title||"Foto del curso"}</h3><span class="photo-card-semester">${photo.semester||""}</span></div><span class="photo-card-count">${photo.images.length} 📸</span></div>`;
         card.addEventListener("click",()=>openPhotoModal(photo));
         container.appendChild(card);
     });
@@ -413,26 +422,60 @@ function renderEmptyPhotos(){
 function initializePhotoModal(){
     const closeButton=document.getElementById("photo-modal-close");
     const backdrop=document.getElementById("photo-modal-backdrop");
+    const prevButton=document.getElementById("photo-modal-prev");
+    const nextButton=document.getElementById("photo-modal-next");
     if(closeButton)closeButton.addEventListener("click",closePhotoModal);
     if(backdrop)backdrop.addEventListener("click",closePhotoModal);
+    if(prevButton)prevButton.addEventListener("click",()=>changePhoto(-1));
+    if(nextButton)nextButton.addEventListener("click",()=>changePhoto(1));
+    document.addEventListener("keydown",event=>{
+        if(!document.getElementById("photo-modal").classList.contains("active"))return;
+        if(event.key==="Escape")closePhotoModal();
+        if(event.key==="ArrowLeft")changePhoto(-1);
+        if(event.key==="ArrowRight")changePhoto(1);
+    });
 }
 
-/* ABRIR FOTO */
+/* ABRIR ÁLBUM */
 function openPhotoModal(photo){
-    const modal=document.getElementById("photo-modal");
-    document.getElementById("photo-modal-image").src=photo.image;
-    document.getElementById("photo-modal-image").alt=photo.title||"Foto del curso";
-    document.getElementById("photo-modal-semester").textContent=photo.semester||"";
-    document.getElementById("photo-modal-title").textContent=photo.title||"Foto del curso";
-    document.getElementById("photo-modal-description").textContent=photo.description||"";
-    modal.classList.add("active");
+    if(!photo.images||photo.images.length===0)return;
+    currentPhotoAlbum=photo;
+    currentPhotoIndex=0;
+    updatePhotoModal();
+    document.getElementById("photo-modal").classList.add("active");
     document.body.style.overflow="hidden";
+}
+
+/* ACTUALIZAR FOTO */
+function updatePhotoModal(){
+    if(!currentPhotoAlbum)return;
+    const image=currentPhotoAlbum.images[currentPhotoIndex];
+    const total=currentPhotoAlbum.images.length;
+    document.getElementById("photo-modal-image").src=image;
+    document.getElementById("photo-modal-image").alt=currentPhotoAlbum.title||"Foto del curso";
+    document.getElementById("photo-modal-semester").textContent=currentPhotoAlbum.semester||"";
+    document.getElementById("photo-modal-title").textContent=currentPhotoAlbum.title||"Foto del curso";
+    document.getElementById("photo-modal-description").textContent=currentPhotoAlbum.description||"";
+    document.getElementById("photo-modal-counter").textContent=`${currentPhotoIndex+1} / ${total}`;
+    document.getElementById("photo-modal-prev").style.display=total>1?"flex":"none";
+    document.getElementById("photo-modal-next").style.display=total>1?"flex":"none";
+}
+
+/* CAMBIAR FOTO */
+function changePhoto(direction){
+    if(!currentPhotoAlbum||currentPhotoAlbum.images.length<=1)return;
+    const total=currentPhotoAlbum.images.length;
+    currentPhotoIndex=(currentPhotoIndex+direction+total)%total;
+    updatePhotoModal();
 }
 
 /* CERRAR FOTO */
 function closePhotoModal(){
     const modal=document.getElementById("photo-modal");
     modal.classList.remove("active");
+    document.getElementById("photo-modal-image").src="";
+    currentPhotoAlbum=null;
+    currentPhotoIndex=0;
     document.body.style.overflow="";
 }
 
