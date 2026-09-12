@@ -33,7 +33,8 @@ async function loadGames(){
             link:item.ID_Drive?`https://drive.google.com/uc?export=download&id=${item.ID_Drive}`:item.Descarga||"",
             images:item.Imágenes?item.Imágenes.split("|").map(value=>`assets/games/${item.ID}/${value.trim()}`).filter(Boolean):[],
             authors:item.Autores?item.Autores.split("|").map(value=>value.trim()).filter(Boolean):[],
-            gotas:{enabled:String(item.GOTA).toLowerCase()==="true",semester:String(item.GOTA).toLowerCase()==="true"?item.Semestre:""}
+            gotas:{enabled:String(item.GOTA).trim().toLowerCase()==="true",semester:String(item.GOTA).trim().toLowerCase()==="true"?item.Semestre:""},
+            featured:String(item.Destacado).trim().toLowerCase()==="true"
         })).filter(game=>game.id);
         console.log("Juegos cargados desde Google Sheets:",games);
         renderHomeGames();
@@ -41,7 +42,6 @@ async function loadGames(){
         renderGotas();
         initializeFilters();
         initializeHeroGotas();
-        if(games.length>0)selectGame(0);
     }catch(error){
         console.error("No se pudieron cargar los juegos desde Google Sheets:",error);
         renderGamesError();
@@ -391,15 +391,27 @@ function renderHomeGames(){
     const container=document.getElementById("home-games-grid");
     const count=document.getElementById("home-game-count");
     container.innerHTML="";
-    games.forEach((game,index)=>container.appendChild(createGameCard(game,index)));
-    if(count)count.textContent=`${games.length} ${games.length===1?"juego":"juegos"}`;
+    const featuredGames=games.filter(game=>game.featured);
+    featuredGames.forEach(game=>container.appendChild(createGameCard(game,games.indexOf(game))));
+    if(!featuredGames.length)container.innerHTML=`<div class="empty-section"><span>🎮</span><h2>Aún no hay juegos destacados</h2><p>Explora todos los juegos en el catálogo.</p></div>`;
+    if(count)count.textContent=`${featuredGames.length} ${featuredGames.length===1?"juego":"juegos"}`;
 }
 
 /* RENDERIZAR JUEGOS FILTRADOS */
-function renderAllGames(career="all",subject="all",category="all",platform="all"){
+function normalizeGameText(value){
+    return String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().replace(/\s+/g," ").toLowerCase();
+}
+
+function applyGameFilters(){
+    const fields=[["career-filter","career"],["subject-filter","subject"],["category-filter","category"],["platform-filter","platform"]];
+    const search=normalizeGameText(document.getElementById("game-search")?.value);
+    const selected=fields.map(([id,field])=>[document.getElementById(id)?.value||"all",field]);
+    renderAllGames(games.filter(game=>normalizeGameText(game.name).includes(search)&&selected.every(([value,field])=>value==="all"||normalizeGameText(game[field])===normalizeGameText(value))));
+}
+
+function renderAllGames(filteredGames=games){
     const container=document.getElementById("all-games-grid");
     if(!container)return;
-    const filteredGames=games.filter(game=>(career==="all"||game.career===career)&&(subject==="all"||game.subject===subject)&&(category==="all"||game.category===category)&&(platform==="all"||game.platform===platform));
     container.innerHTML="";
     if(filteredGames.length===0){
         container.innerHTML=`<div class="empty-section"><span>🎮</span><h2>No hay juegos disponibles</h2><p>No encontramos juegos con los filtros seleccionados.</p></div>`;
@@ -413,7 +425,7 @@ function createGameCard(game,index){
     const card=document.createElement("article");
     card.className="game-card";
     const image=game.images&&game.images.length>0?game.images[0]:"";
-    card.innerHTML=`<img class="game-card-image" src="${image}" alt="${game.name}"><div class="game-card-content"><h3 class="game-card-title">${game.name}</h3><p class="game-card-description">${game.description}</p><div class="game-card-meta"><span>${game.category||"Categoría"}</span><span>${game.platform||"Plataforma"}</span><span>${game.engine||"Motor"}</span></div></div>`;
+    card.innerHTML=`<img class="game-card-image" src="${image}" alt="${game.name}"><div class="game-card-content">${game.gotas?.enabled?'<span class="game-gota-badge" aria-label="Ganador G.O.T.A">🏆 G.O.T.A</span>':""}<h3 class="game-card-title">${game.name}</h3><p class="game-card-description">${game.description}</p><div class="game-card-meta"><span>${game.category||"Categoría"}</span><span>${game.platform||"Plataforma"}</span><span>${game.engine||"Motor"}</span></div></div>`;
     card.addEventListener("click",()=>showGameDetail(index));
     return card;
 }
@@ -452,57 +464,32 @@ function updateHero(game){
 
 /* FILTROS INTELIGENTES */
 function initializeFilters(){
-    const careerFilter=document.getElementById("career-filter");
-    const subjectFilter=document.getElementById("subject-filter");
-    const categoryFilter=document.getElementById("category-filter");
-    const platformFilter=document.getElementById("platform-filter");
-    if(!careerFilter||!subjectFilter||!categoryFilter||!platformFilter)return;
-    const populateFilter=(select,values,defaultText,currentValue="all")=>{
-        select.innerHTML=`<option value="all">${defaultText}</option>`;
-        [...new Set(values.filter(Boolean))].sort().forEach(value=>{
+    const filters=[
+        ["career-filter","career","Todas las carreras"],
+        ["subject-filter","subject","Todas las asignaturas"],
+        ["category-filter","category","Todas las categorías"],
+        ["platform-filter","platform","Todas las plataformas"]
+    ];
+    filters.forEach(([id,field,label])=>{
+        const select=document.getElementById(id);
+        if(!select)return;
+        select.innerHTML=`<option value="all">${label}</option>`;
+        const values=new Map();
+        games.forEach(game=>{
+            const value=String(game[field]||"").trim().replace(/\s+/g," ");
+            const key=normalizeGameText(value);
+            if(key&&!values.has(key))values.set(key,value);
+        });
+        [...values.values()].sort((a,b)=>a.localeCompare(b,"es")).forEach(value=>{
             const option=document.createElement("option");
             option.value=value;
             option.textContent=value;
             select.appendChild(option);
         });
-        select.value=[...select.options].some(option=>option.value===currentValue)?currentValue:"all";
-    };
-    const updateFilters=()=>{
-        const career=careerFilter.value;
-        const subject=subjectFilter.value;
-        const category=categoryFilter.value;
-        const platform=platformFilter.value;
-        let availableGames=games;
-        if(career!=="all")availableGames=availableGames.filter(game=>game.career===career);
-        if(subject!=="all")availableGames=availableGames.filter(game=>game.subject===subject);
-        populateFilter(category,availableGames.map(game=>game.category),"Todas las categorías",category);
-        availableGames=games;
-        if(career!=="all")availableGames=availableGames.filter(game=>game.career===career);
-        if(subject!=="all")availableGames=availableGames.filter(game=>game.subject===subject);
-        if(category!=="all")availableGames=availableGames.filter(game=>game.category===category);
-        populateFilter(platform,availableGames.map(game=>game.platform),"Todas las plataformas",platform);
-        renderAllGames(career,subject,category,platform);
-    };
-    populateFilter(careerFilter,games.map(game=>game.career),"Todas las carreras");
-    populateFilter(subjectFilter,games.map(game=>game.subject),"Todas las asignaturas");
-    populateFilter(categoryFilter,games.map(game=>game.category),"Todas las categorías");
-    populateFilter(platformFilter,games.map(game=>game.platform),"Todas las plataformas");
-    careerFilter.addEventListener("change",()=>{
-        subjectFilter.value="all";
-        categoryFilter.value="all";
-        platformFilter.value="all";
-        updateFilters();
+        select.addEventListener("change",applyGameFilters);
     });
-    subjectFilter.addEventListener("change",()=>{
-        categoryFilter.value="all";
-        platformFilter.value="all";
-        updateFilters();
-    });
-    categoryFilter.addEventListener("change",()=>{
-        platformFilter.value="all";
-        updateFilters();
-    });
-    platformFilter.addEventListener("change",updateFilters);
+    document.getElementById("game-search")?.addEventListener("input",applyGameFilters);
+    applyGameFilters();
 }
 
 /* FICHA DEL JUEGO */
@@ -599,28 +586,17 @@ function initializeGotas(){
 
 /* ROTADOR GOTA EN INICIO */
 function initializeHeroGotas(){
-    const gotas=games.filter(game=>game.gotas&&game.gotas.enabled);
-    if(!gotas.length)return;
-    let currentIndex=Math.floor(Math.random()*gotas.length);
-    const background=document.getElementById("hero-background");
-    const label=document.getElementById("hero-label");
-    const title=document.getElementById("hero-title");
-    const description=document.getElementById("hero-description");
-    const meta=document.getElementById("hero-meta");
-    const download=document.getElementById("hero-download");
+    const featuredGames=games.filter(game=>game.featured);
+    if(!featuredGames.length){
+        document.getElementById("hero-download").style.display="none";
+        return;
+    }
+    let currentIndex=Math.floor(Math.random()*featuredGames.length);
     const render=()=>{
-        const game=gotas[currentIndex];
-        const image=game.images&&game.images.length?game.images[0]:"";
-        background.style.backgroundImage=image?`url("${image}")`:"";
-        label.textContent=`G.O.T.A · ${game.semester||"GANADOR"}`;
-        title.textContent=game.name;
-        description.textContent=game.description;
-        meta.innerHTML=`<span>${game.category||"Categoría"}</span><span>${game.platform||"Plataforma"}</span><span>${game.engine||"Motor"}</span>`;
-        download.href=game.link||"#";
-        download.style.display=game.link?"inline-flex":"none";
+        updateHero(featuredGames[currentIndex]);
     };
     render();
-    if(gotas.length>1)setInterval(()=>{currentIndex=(currentIndex+1)%gotas.length;render()},10000);
+    if(featuredGames.length>1)setInterval(()=>{currentIndex=(currentIndex+1)%featuredGames.length;render()},10000);
 }
 
 
@@ -747,6 +723,22 @@ function updatePhotoModal(){
     document.getElementById("photo-modal-counter").textContent=`${currentPhotoIndex+1} / ${total}`;
     document.getElementById("photo-modal-prev").style.display=total>1?"flex":"none";
     document.getElementById("photo-modal-next").style.display=total>1?"flex":"none";
+    const thumbnails=document.getElementById("photo-modal-thumbnails");
+    thumbnails.innerHTML="";
+    currentPhotoAlbum.images.forEach((src,index)=>{
+        const button=document.createElement("button");
+        button.type="button";
+        button.className=`photo-modal-thumbnail${index===currentPhotoIndex?" active":""}`;
+        button.setAttribute("aria-label",`Ver foto ${index+1} de ${total}`);
+        button.setAttribute("aria-pressed",String(index===currentPhotoIndex));
+        const thumbnail=document.createElement("img");
+        thumbnail.src=src;
+        thumbnail.alt="";
+        button.appendChild(thumbnail);
+        button.addEventListener("click",()=>{currentPhotoIndex=index;updatePhotoModal();});
+        thumbnails.appendChild(button);
+    });
+    thumbnails.children[currentPhotoIndex]?.scrollIntoView({block:"nearest",inline:"nearest"});
 }
 
 /* CAMBIAR FOTO */
@@ -762,6 +754,7 @@ function closePhotoModal(){
     const modal=document.getElementById("photo-modal");
     modal.classList.remove("active");
     document.getElementById("photo-modal-image").src="";
+    document.getElementById("photo-modal-thumbnails").innerHTML="";
     currentPhotoAlbum=null;
     currentPhotoIndex=0;
     document.body.style.overflow="";
